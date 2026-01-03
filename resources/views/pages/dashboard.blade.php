@@ -251,8 +251,57 @@
         <span class="dash-summary-label">Average Score</span>
         <span class="dash-summary-value">{{ number_format($userStats['average_quiz_score'], 1) }}%</span>
       </div>
+      @php
+        $certificatesCount = auth()->user()->certificates()->count();
+      @endphp
+      <div class="dash-summary-item">
+        <span class="dash-summary-label">Certificates</span>
+        <span class="dash-summary-value">
+          <a href="{{ route('certificates.index') }}" style="color: inherit; text-decoration: none;">
+            {{ $certificatesCount }}
+          </a>
+        </span>
+      </div>
       @endif
     </section>
+
+    @auth
+    @php
+      $userCertificates = auth()->user()->certificates()->with('track')->latest('issued_at')->take(3)->get();
+    @endphp
+    @if($userCertificates->count() > 0)
+    <!-- Certificates Section -->
+    <section style="margin-bottom: 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2 style="font-size: 20px; font-weight: 600;">🏆 My Certificates</h2>
+        <a href="{{ route('certificates.index') }}" style="color: #22c55e; text-decoration: none; font-size: 14px;">
+          View All <i class="fas fa-arrow-left"></i>
+        </a>
+      </div>
+      <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        @foreach($userCertificates as $certificate)
+        <article class="dash-card">
+          <div style="font-size: 32px; color: #22c55e; margin-bottom: 10px;">
+            <i class="fas fa-certificate"></i>
+          </div>
+          <h2 class="dash-card-title">{{ $certificate->track->title }}</h2>
+          <p class="dash-card-text" style="font-size: 11px; color: #9ca3af;">
+            {{ $certificate->certificate_number }}
+          </p>
+          <p class="dash-card-text" style="font-size: 11px; color: #9ca3af; margin-top: -10px;">
+            Issued: {{ $certificate->issued_at->format('M Y') }}
+          </p>
+          <div class="dash-card-actions">
+            <button class="btn-main" onclick="location.href='{{ route('tracks.certificate.show', $certificate->track) }}'">
+              View Certificate
+            </button>
+          </div>
+        </article>
+        @endforeach
+      </div>
+    </section>
+    @endif
+    @endauth
 
     @if($popularTracks->count() > 0)
     <!-- Popular Tracks Section -->
@@ -339,6 +388,17 @@
             View Labs
           </button>
           @endif
+          @auth
+            @php
+              $isCompleted = $track->isCompletedByUser(auth()->id());
+              $certificate = $track->getUserCertificate(auth()->id());
+            @endphp
+            @if($isCompleted && $certificate)
+            <button class="btn-main" style="background: #28a745;" onclick="location.href='{{ route('tracks.certificate.show', $track) }}'">
+              <i class="fas fa-certificate"></i> Certificate
+            </button>
+            @endif
+          @endauth
         </div>
       </article>
       @endforeach

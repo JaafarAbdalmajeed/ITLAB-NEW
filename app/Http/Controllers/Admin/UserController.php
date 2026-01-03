@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Track;
 use App\Models\QuizResult;
 use App\Models\UserProgress;
+use App\Services\ProgressService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,7 +33,10 @@ class UserController extends Controller
             'in_progress_tracks' => $user->progress()->where('progress_percent', '<', 100)->count(),
         ];
         
-        return view('admin.users.show', compact('user', 'stats'));
+        $allTracks = Track::all();
+        $userProgressTracks = $user->progress->pluck('track_id')->toArray();
+        
+        return view('admin.users.show', compact('user', 'stats', 'allTracks', 'userProgressTracks'));
     }
 
     public function edit(User $user)
@@ -74,6 +79,24 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Complete a track for a user
+     */
+    public function completeTrack(Request $request, User $user, Track $track)
+    {
+        $progressService = app(ProgressService::class);
+        
+        try {
+            $progressService->markTrackCompleted($user, $track);
+            
+            return redirect()->back()
+                ->with('success', "Track '{$track->title}' has been marked as completed for {$user->name}. Certificate has been issued.");
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'An error occurred while completing the track: ' . $e->getMessage());
+        }
     }
 }
 

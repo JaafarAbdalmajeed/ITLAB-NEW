@@ -460,6 +460,10 @@
                     <i class="fas fa-users"></i>
                     Users
                 </a>
+                <a href="{{ route('admin.certificates.index') }}" class="admin-nav-item {{ request()->routeIs('admin.certificates.*') ? 'active' : '' }}">
+                    <i class="fas fa-certificate"></i>
+                    Certificates
+                </a>
                 <a href="{{ route('admin.contacts.index') }}" class="admin-nav-item {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
                     <i class="fas fa-envelope"></i>
                     Contacts

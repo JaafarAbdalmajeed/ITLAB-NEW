@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('quiz_results', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-    $table->foreignId('quiz_id')->constrained()->cascadeOnDelete();
-    $table->integer('score');
-    $table->timestamps();
-});
+        Schema::create('quiz_results', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('quiz_id')->constrained()->cascadeOnDelete();
+            $table->integer('score');
+            $table->timestamps();
+        });
     }
 
     /**

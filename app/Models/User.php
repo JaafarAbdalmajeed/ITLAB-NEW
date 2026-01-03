@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\UserProgress::class);
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(\App\Models\Certificate::class);
+    }
 }

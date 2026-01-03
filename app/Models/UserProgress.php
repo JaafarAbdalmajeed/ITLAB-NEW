@@ -30,4 +30,12 @@ class UserProgress extends Model
     {
         return $this->belongsTo(Track::class);
     }
+
+    /**
+     * Check if progress is completed (100%)
+     */
+    public function isCompleted(): bool
+    {
+        return $this->progress_percent >= 100;
+    }
 }

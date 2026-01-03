@@ -61,6 +61,11 @@ class Track extends Model
         return $this->hasMany(UserProgress::class);
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
     /**
      * Scope a query to only include published tracks.
      */
@@ -139,5 +144,37 @@ class Track extends Model
     public function getQuizRoute(): string
     {
         return \App\Helpers\TrackRouteHelper::getQuizRoute($this);
+    }
+
+    /**
+     * Check if user has completed this track
+     */
+    public function isCompletedByUser(?int $userId = null): bool
+    {
+        $userId = $userId ?? auth()->id();
+        
+        if (!$userId) {
+            return false;
+        }
+
+        $progress = $this->getUserProgress($userId);
+        
+        return $progress && $progress->progress_percent >= 100;
+    }
+
+    /**
+     * Get user's certificate for this track
+     */
+    public function getUserCertificate(?int $userId = null): ?Certificate
+    {
+        $userId = $userId ?? auth()->id();
+        
+        if (!$userId) {
+            return null;
+        }
+
+        return $this->certificates()
+            ->where('user_id', $userId)
+            ->first();
     }
 }

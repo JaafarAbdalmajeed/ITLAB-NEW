@@ -91,4 +91,48 @@ class UserProgressController extends Controller
 
         return response()->json($overallProgress);
     }
+
+    /**
+     * Mark track as completed
+     */
+    public function complete(Request $request, Track $track)
+    {
+        $user = auth()->user();
+        
+        if (!$user) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'error' => 'You must be logged in'
+                ], 401);
+            }
+            return redirect()->route('auth.login');
+        }
+
+        try {
+            $this->progressService->markTrackCompleted($user, $track);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Track completed successfully! Certificate has been issued.',
+                    'certificate' => $track->getUserCertificate($user->id)
+                ]);
+            }
+
+            return redirect()->back()
+                ->with('success', 'Track completed successfully! Your certificate has been issued.');
+
+        } catch (\Exception $e) {
+            Log::error('Track completion error: ' . $e->getMessage());
+            
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'error' => 'An error occurred while completing the track'
+                ], 500);
+            }
+
+            return redirect()->back()
+                ->with('error', 'An error occurred while completing the track');
+        }
+    }
 }

@@ -14,6 +14,15 @@ class Lesson extends Model
         'title',
         'content',
         'order',
+        'youtube_videos',
+        'sections',
+        'enable_code_editor',
+    ];
+
+    protected $casts = [
+        'youtube_videos' => 'array',
+        'sections' => 'array',
+        'enable_code_editor' => 'boolean',
     ];
 
     public function track()

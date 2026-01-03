@@ -140,6 +140,30 @@
         </div>
         @endif
 
+        <!-- Certificate Section -->
+        @auth
+            @php
+                $isCompleted = $currentTrack->isCompletedByUser(auth()->id());
+                $certificate = $currentTrack->getUserCertificate(auth()->id());
+            @endphp
+            @if($isCompleted && $certificate)
+            <div class="sidebar-section">
+                <div class="sidebar-section-title {{ $currentPage === 'certificate' ? 'active' : '' }}" data-toggle="certificate">
+                    <span>Certificate</span>
+                    <i class="fa-solid fa-chevron-right" style="{{ $currentPage === 'certificate' ? 'transform: rotate(90deg);' : '' }}"></i>
+                </div>
+                <div class="sidebar-section-content {{ $currentPage === 'certificate' ? 'active' : '' }}" id="certificateContent">
+                    <a href="{{ route('tracks.certificate.show', $currentTrack) }}" class="sidebar-link {{ $currentPage === 'certificate' ? 'active' : '' }}">
+                        <i class="fas fa-certificate"></i> عرض الشهادة
+                    </a>
+                    <a href="{{ route('tracks.certificate.download', $currentTrack) }}" class="sidebar-link" target="_blank">
+                        <i class="fas fa-download"></i> تحميل الشهادة
+                    </a>
+                </div>
+            </div>
+            @endif
+        @endauth
+
     @elseif($isCertificationPage)
         <!-- Certification Tutorial -->
         <div class="sidebar-section">

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('quizzes', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('track_id')->constrained()->cascadeOnDelete();
-    $table->string('title');
-    $table->timestamps();
-});
+        Schema::create('quizzes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('track_id')->constrained()->cascadeOnDelete();
+            $table->string('title');
+            $table->timestamps();
+        });
     }
 
     /**

@@ -7,6 +7,104 @@
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+<style>
+    /* Ensure white text on dark backgrounds only */
+    body.page-cyber-network,
+    body.page-cyber-web,
+    body.page-cyber,
+    body.page-js,
+    body.page-home {
+        color: #ffffff !important;
+    }
+
+    body.page-cyber-network .hero-heading,
+    body.page-cyber-web .hero-heading,
+    body.page-cyber .hero-heading,
+    body.page-js .hero-heading,
+    body.page-home .hero-heading {
+        color: #ffffff !important;
+    }
+
+    body.page-cyber-network .hero-subtitle,
+    body.page-cyber-web .hero-subtitle,
+    body.page-cyber .hero-subtitle,
+    body.page-js .hero-subtitle,
+    body.page-home .hero-subtitle {
+        color: #d9d9e3 !important;
+    }
+
+    body.page-cyber-network .hero-content,
+    body.page-cyber-web .hero-content,
+    body.page-cyber .hero-content,
+    body.page-js .hero-content,
+    body.page-home .hero-content {
+        color: #e5e7eb !important;
+    }
+
+    body.page-cyber-network .content-header h1,
+    body.page-cyber-web .content-header h1,
+    body.page-cyber .content-header h1,
+    body.page-js .content-header h1,
+    body.page-home .content-header h1 {
+        color: #ffffff !important;
+    }
+
+    body.page-cyber-network .back-link,
+    body.page-cyber-web .back-link,
+    body.page-cyber .back-link,
+    body.page-js .back-link,
+    body.page-home .back-link {
+        color: #d9d9e3 !important;
+    }
+
+    body.page-cyber-network .back-link:hover,
+    body.page-cyber-web .back-link:hover,
+    body.page-cyber .back-link:hover,
+    body.page-js .back-link:hover,
+    body.page-home .back-link:hover {
+        color: #ffffff !important;
+    }
+
+    /* Ensure dark text on light backgrounds */
+    body.page-html,
+    body.page-css {
+        color: #000000 !important;
+    }
+
+    body.page-html .hero-heading,
+    body.page-css .hero-heading,
+    body.page-html h1,
+    body.page-css h1 {
+        color: #000000 !important;
+    }
+
+    body.page-html .hero-subtitle,
+    body.page-css .hero-subtitle {
+        color: #333333 !important;
+    }
+
+    body.page-html .hero-content,
+    body.page-css .hero-content,
+    body.page-html p,
+    body.page-css p {
+        color: #333333 !important;
+    }
+
+    body.page-html .content-header h1,
+    body.page-css .content-header h1 {
+        color: #000000 !important;
+    }
+
+    body.page-html .back-link,
+    body.page-css .back-link {
+        color: #333333 !important;
+    }
+
+    body.page-html .back-link:hover,
+    body.page-css .back-link:hover {
+        color: #000000 !important;
+    }
+</style>
 @endpush
 
 <div class="page-wrapper">
@@ -70,6 +168,33 @@
                     Labs
                 </button>
             @endif
+
+            @auth
+                @php
+                    $isCompleted = $track->isCompletedByUser(auth()->id());
+                    $certificate = $track->getUserCertificate(auth()->id());
+                    $userProgress = $track->getUserProgress(auth()->id());
+                    $progressPercent = $userProgress ? $userProgress->progress_percent : 0;
+                @endphp
+                
+                @if(!$isCompleted)
+                    <form action="{{ route('tracks.complete', $track) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to mark this track as completed? A certificate will be issued automatically.');">
+                        @csrf
+                        <button type="submit" class="btn-main" style="background-color:#17a2b8; border:none; cursor:pointer;">
+                            <i class="fas fa-check-circle"></i> Complete Track
+                        </button>
+                    </form>
+                    @if($progressPercent > 0)
+                        <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                            Progress: {{ $progressPercent }}%
+                        </div>
+                    @endif
+                @elseif($certificate)
+                    <a href="{{ route('tracks.certificate.show', $track) }}" class="btn-main" style="background-color:#28a745; text-decoration:none; display:inline-block; padding:12px 24px; border-radius:6px; color:white; font-weight:600;">
+                        <i class="fas fa-certificate"></i> View Certificate
+                    </a>
+                @endif
+            @endauth
         </div>
 
         @if($track->hero_button_text && $track->hero_button_link)

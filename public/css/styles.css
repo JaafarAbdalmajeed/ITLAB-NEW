@@ -224,16 +224,217 @@ body {
   color: #e5e7eb;
 }
 
+/* مسارات Cyber Security - خلفية غامقة */
+.page-cyber-network,
+.page-cyber-web {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e5e7eb;
+}
+
 /* تلوين النص حسب الخلفية */
 .page-home .hero-subtitle,
 .page-js .hero-subtitle,
-.page-cyber .hero-subtitle {
+.page-cyber .hero-subtitle,
+.page-cyber-network .hero-subtitle,
+.page-cyber-web .hero-subtitle {
   color: #d9d9e3;
 }
 
 .page-html .hero-subtitle,
 .page-css .hero-subtitle {
   color: #333;
+}
+
+/* ضمان أن النصوص بيضاء في الصفحات ذات الخلفية الغامقة فقط */
+.page-cyber,
+.page-cyber-network,
+.page-cyber-web,
+.page-js,
+.page-home {
+  color: #ffffff !important;
+}
+
+.page-cyber .hero-heading,
+.page-cyber-network .hero-heading,
+.page-cyber-web .hero-heading,
+.page-js .hero-heading,
+.page-home .hero-heading,
+.page-cyber h1,
+.page-cyber-network h1,
+.page-cyber-web h1,
+.page-js h1,
+.page-home h1 {
+  color: #ffffff !important;
+}
+
+.page-cyber .hero-content,
+.page-cyber-network .hero-content,
+.page-cyber-web .hero-content,
+.page-js .hero-content,
+.page-home .hero-content,
+.page-cyber p,
+.page-cyber-network p,
+.page-cyber-web p,
+.page-js p,
+.page-home p {
+  color: #e5e7eb !important;
+}
+
+.page-cyber .content-header h1,
+.page-cyber-network .content-header h1,
+.page-cyber-web .content-header h1,
+.page-js .content-header h1,
+.page-home .content-header h1 {
+  color: #ffffff !important;
+}
+
+.page-cyber .back-link,
+.page-cyber-network .back-link,
+.page-cyber-web .back-link,
+.page-js .back-link,
+.page-home .back-link {
+  color: #d9d9e3 !important;
+}
+
+.page-cyber .back-link:hover,
+.page-cyber-network .back-link:hover,
+.page-cyber-web .back-link:hover,
+.page-js .back-link:hover,
+.page-home .back-link:hover {
+  color: #ffffff !important;
+}
+
+/* Lesson pages styling */
+body[class*="-lesson"] .lesson-main-content,
+body[class*="-lesson"] .lesson-videos-section {
+  background: var(--card-bg, #fff) !important;
+  color: var(--text, #333) !important;
+}
+
+body[class*="page-cyber"][class*="-lesson"],
+body[class*="page-js"][class*="-lesson"],
+body[class*="page-home"][class*="-lesson"] {
+  color: #ffffff !important;
+}
+
+body[class*="page-cyber"][class*="-lesson"] .lesson-main-content,
+body[class*="page-js"][class*="-lesson"] .lesson-main-content,
+body[class*="page-home"][class*="-lesson"] .lesson-main-content,
+body[class*="page-cyber"][class*="-lesson"] .lesson-videos-section,
+body[class*="page-js"][class*="-lesson"] .lesson-videos-section,
+body[class*="page-home"][class*="-lesson"] .lesson-videos-section {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e5e7eb !important;
+}
+
+body[class*="page-cyber"][class*="-lesson"] h1,
+body[class*="page-cyber"][class*="-lesson"] h2,
+body[class*="page-cyber"][class*="-lesson"] h3,
+body[class*="page-js"][class*="-lesson"] h1,
+body[class*="page-js"][class*="-lesson"] h2,
+body[class*="page-js"][class*="-lesson"] h3,
+body[class*="page-home"][class*="-lesson"] h1,
+body[class*="page-home"][class*="-lesson"] h2,
+body[class*="page-home"][class*="-lesson"] h3 {
+  color: #ffffff !important;
+}
+
+body[class*="page-html"][class*="-lesson"],
+body[class*="page-css"][class*="-lesson"] {
+  color: #000000 !important;
+}
+
+body[class*="page-html"][class*="-lesson"] .lesson-main-content,
+body[class*="page-css"][class*="-lesson"] .lesson-main-content,
+body[class*="page-html"][class*="-lesson"] .lesson-videos-section,
+body[class*="page-css"][class*="-lesson"] .lesson-videos-section {
+  background: #ffffff !important;
+  border-color: #e5e7eb !important;
+  color: #333333 !important;
+}
+
+body[class*="page-html"][class*="-lesson"] h1,
+body[class*="page-html"][class*="-lesson"] h2,
+body[class*="page-html"][class*="-lesson"] h3,
+body[class*="page-css"][class*="-lesson"] h1,
+body[class*="page-css"][class*="-lesson"] h2,
+body[class*="page-css"][class*="-lesson"] h3 {
+  color: #000000 !important;
+}
+
+/* Ensure dark text on light backgrounds */
+.page-html,
+.page-css {
+  color: #000000 !important;
+}
+
+.page-html *,
+.page-css * {
+  color: inherit;
+}
+
+.page-html .hero-heading,
+.page-css .hero-heading,
+.page-html h1,
+.page-css h1,
+.page-html h2,
+.page-css h2,
+.page-html h3,
+.page-css h3,
+.page-html h4,
+.page-css h4,
+.page-html h5,
+.page-css h5,
+.page-html h6,
+.page-css h6 {
+  color: #000000 !important;
+}
+
+.page-html .hero-subtitle,
+.page-css .hero-subtitle {
+  color: #333333 !important;
+}
+
+.page-html .hero-content,
+.page-css .hero-content,
+.page-html p,
+.page-css p,
+.page-html span,
+.page-css span,
+.page-html div,
+.page-css div {
+  color: #333333 !important;
+}
+
+.page-html .content-header,
+.page-css .content-header {
+  color: #000000 !important;
+}
+
+.page-html .content-header h1,
+.page-css .content-header h1 {
+  color: #000000 !important;
+}
+
+.page-html .back-link,
+.page-css .back-link {
+  color: #333333 !important;
+}
+
+.page-html .back-link:hover,
+.page-css .back-link:hover {
+  color: #000000 !important;
+}
+
+.page-html a:not(.back-link),
+.page-css a:not(.back-link) {
+  color: #0066cc !important;
+}
+
+.page-html a:not(.back-link):hover,
+.page-css a:not(.back-link):hover {
+  color: #004499 !important;
 }
 
 /* ====== SEARCH BAR في الصفحة الرئيسية ====== */
@@ -588,14 +789,46 @@ body {
   color: #e5e7eb;
 }
 
-.track-net {
+.track-net,
+.track-cyber-network {
   background: radial-gradient(circle at top, #0f172a, #020617);
   color: #e5e7eb;
 }
 
-.track-web {
+.track-net h4,
+.track-cyber-network h4 {
+  color: #d1d5db !important; /* لون أفتح للعنوان */
+}
+
+.track-net ul li,
+.track-cyber-network ul li {
+  color: #d1d5db !important; /* لون أفتح للنقاط */
+}
+
+.track-net p,
+.track-cyber-network p {
+  color: #ffffff !important; /* أبيض للوصف */
+}
+
+.track-web,
+.track-cyber-web {
   background: radial-gradient(circle at top, #111827, #020617);
   color: #e5e7eb;
+}
+
+.track-web h4,
+.track-cyber-web h4 {
+  color: #d1d5db !important; /* لون أفتح للعنوان */
+}
+
+.track-web ul li,
+.track-cyber-web ul li {
+  color: #d1d5db !important; /* لون أفتح للنقاط */
+}
+
+.track-web p,
+.track-cyber-web p {
+  color: #ffffff !important; /* أبيض للوصف */
 }
 
 /* موبايل */

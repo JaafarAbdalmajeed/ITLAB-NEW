@@ -33,6 +33,10 @@
         <h3>Quiz Results</h3>
         <div class="stat-value">{{ $stats['quiz_results'] }}</div>
     </div>
+    <div class="stat-card">
+        <h3>Certificates</h3>
+        <div class="stat-value">{{ $stats['certificates'] ?? 0 }}</div>
+    </div>
 </div>
 
 <div class="admin-card">

@@ -20,6 +20,7 @@
                 <th>Lessons</th>
                 <th>Quizzes</th>
                 <th>Labs</th>
+                <th>Completed Students</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -33,6 +34,11 @@
                     <td>{{ $track->quizzes_count }}</td>
                     <td>{{ $track->labs_count }}</td>
                     <td>
+                        <a href="{{ route('admin.tracks.show', $track) }}" style="color: var(--admin-secondary); font-weight: bold; text-decoration: none;">
+                            {{ $track->completed_students_count ?? 0 }} Students
+                        </a>
+                    </td>
+                    <td>
                         <a href="{{ route('admin.tracks.lessons.index', $track) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
                             <i class="fas fa-book"></i> Lessons
                         </a>
@@ -41,6 +47,9 @@
                         </a>
                         <a href="{{ route('admin.tracks.labs.index', $track) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
                             <i class="fas fa-flask"></i> Labs
+                        </a>
+                        <a href="{{ route('admin.tracks.show', $track) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
+                            <i class="fas fa-eye"></i> View
                         </a>
                         <a href="{{ route('admin.tracks.edit', $track) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
                             <i class="fas fa-edit"></i> Edit
@@ -56,7 +65,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" style="text-align: center;">No tracks found. <a href="{{ route('admin.tracks.create') }}">Add a new track</a></td>
+                    <td colspan="8" style="text-align: center;">No tracks found. <a href="{{ route('admin.tracks.create') }}">Add a new track</a></td>
                 </tr>
             @endforelse
         </tbody>

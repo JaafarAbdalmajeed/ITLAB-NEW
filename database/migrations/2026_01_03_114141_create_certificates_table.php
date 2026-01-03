@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lessons', function (Blueprint $table) {
+        Schema::create('certificates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('track_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
-            $table->longText('content');        // tutorial / lesson
-            $table->integer('order')->default(0);
+            $table->string('certificate_number')->unique();
+            $table->date('issued_at');
             $table->timestamps();
+
+            $table->unique(['user_id', 'track_id']); // One certificate per user per track
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lessons');
+        Schema::dropIfExists('certificates');
     }
 };

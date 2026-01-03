@@ -91,6 +91,7 @@
                 <th>Track</th>
                 <th>Completion Percentage</th>
                 <th>Last Updated</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -104,10 +105,73 @@
                         </div>
                     </td>
                     <td>{{ $progress->updated_at->format('Y-m-d H:i') }}</td>
+                    <td>
+                        @if($progress->progress_percent < 100)
+                            <form action="{{ route('admin.users.tracks.complete', [$user, $progress->track]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Mark this track as completed for {{ $user->name }}? A certificate will be issued automatically.');">
+                                @csrf
+                                <button type="submit" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">
+                                    <i class="fas fa-check"></i> Complete
+                                </button>
+                            </form>
+                        @else
+                            <span style="color: #28a745; font-weight: bold;">Completed</span>
+                        @endif
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="3" style="text-align: center;">No progress recorded</td>
+                    <td colspan="4" style="text-align: center;">No progress recorded</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+<div class="admin-card" style="margin-top: 20px;">
+    <div class="admin-card-header">
+        <h2>All Tracks - Complete Track for User</h2>
+    </div>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Track</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($allTracks as $track)
+                @php
+                    $userProgress = $user->progress->where('track_id', $track->id)->first();
+                    $isCompleted = $userProgress && $userProgress->progress_percent >= 100;
+                @endphp
+                <tr>
+                    <td>{{ $track->title }}</td>
+                    <td>
+                        @if($isCompleted)
+                            <span style="color: #28a745; font-weight: bold;">Completed</span>
+                        @elseif($userProgress)
+                            <span style="color: #ffc107;">In Progress ({{ $userProgress->progress_percent }}%)</span>
+                        @else
+                            <span style="color: #6c757d;">Not Started</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if(!$isCompleted)
+                            <form action="{{ route('admin.users.tracks.complete', [$user, $track]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Mark track \"{{ $track->title }}\" as completed for {{ $user->name }}? A certificate will be issued automatically.');">
+                                @csrf
+                                <button type="submit" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">
+                                    <i class="fas fa-check"></i> Complete Track
+                                </button>
+                            </form>
+                        @else
+                            <span style="color: #28a745; font-weight: bold;">✓ Completed</span>
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" style="text-align: center;">No tracks available</td>
                 </tr>
             @endforelse
         </tbody>

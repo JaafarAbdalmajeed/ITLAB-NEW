@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\QuizResult;
 use App\Models\UserProgress;
 use App\Models\Contact;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,7 @@ class AdminController extends Controller
                 'pages' => Page::count(),
                 'users' => User::count(),
                 'quiz_results' => QuizResult::count(),
+                'certificates' => Certificate::count(),
             ];
             
             // Check if contacts table exists

@@ -182,6 +182,12 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     
     // Users Management
     Route::resource('users', AdminUserController::class)->except(['create', 'store']);
+    Route::post('users/{user}/tracks/{track}/complete', [AdminUserController::class, 'completeTrack'])->name('admin.users.tracks.complete');
+    
+    // Certificates Management
+    Route::resource('certificates', \App\Http\Controllers\Admin\CertificateController::class);
+    Route::get('certificates/{certificate}/view', [\App\Http\Controllers\Admin\CertificateController::class, 'view'])->name('admin.certificates.view');
+    Route::get('certificates/{certificate}/download', [\App\Http\Controllers\Admin\CertificateController::class, 'download'])->name('admin.certificates.download');
     
     // Contacts Management
     Route::resource('contacts', AdminContactController::class)->except(['create', 'store', 'edit', 'update']);
@@ -213,6 +219,14 @@ Route::middleware(['throttle:progress-updates'])->group(function () {
     Route::post('tracks/{track}/progress', [UserProgressController::class, 'update'])->name('tracks.progress.update');
     Route::get('tracks/{track}/progress', [UserProgressController::class, 'show'])->name('tracks.progress.show');
     Route::get('progress/overall', [UserProgressController::class, 'overall'])->name('progress.overall');
+    Route::post('tracks/{track}/complete', [UserProgressController::class, 'complete'])->name('tracks.complete')->middleware('auth');
+});
+
+// Certificates
+Route::middleware(['auth'])->group(function () {
+    Route::get('certificates', [\App\Http\Controllers\CertificateController::class, 'index'])->name('certificates.index');
+    Route::get('tracks/{track}/certificate', [\App\Http\Controllers\CertificateController::class, 'show'])->name('tracks.certificate.show');
+    Route::get('tracks/{track}/certificate/download', [\App\Http\Controllers\CertificateController::class, 'download'])->name('tracks.certificate.download');
 });
 
 // ============================================================================
