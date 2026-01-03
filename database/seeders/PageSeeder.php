@@ -76,13 +76,13 @@ class PageSeeder extends Seeder
             ['slug' => 'report-bug', 'title' => 'Report a Bug', 'meta_description' => 'Report an issue', 'content' => '<p>Found an issue? Describe steps to reproduce and relevant screenshots. Send to support@example.com.</p>'],
             ['slug' => 'contact', 'title' => 'Contact', 'meta_description' => 'Contact ITLAB', 'content' => '<p>Send us questions, partnership inquiries, or bug reports using the form below.</p>'],
             ['slug' => 'get-certified', 'title' => 'Get Certified', 'meta_description' => 'Certification details', 'content' => '<p>Learn about ITLAB certification paths and passing criteria for each track.</p>'],
-            ['slug' => 'js-reference', 'title' => 'JavaScript Reference', 'meta_description' => 'Snippets used in ITLAB for forms, quizzes, and UI interactions', 'content' => '<p>Snippets used in ITLAB for forms, quizzes, and UI interactions. هذه الصفحة مرجع سريع للطلاب أثناء حل اللابات أو بناء صفحات جديدة.</p><p>⬅ رجوع لصفحة JavaScript الرئيسية: <a href="/js">JavaScript main page</a>.</p><pre><code>// فتح المودال
+            ['slug' => 'js-reference', 'title' => 'JavaScript Reference', 'meta_description' => 'Snippets used in ITLAB for forms, quizzes, and UI interactions', 'content' => '<p>Snippets used in ITLAB for forms, quizzes, and UI interactions. This page is a quick reference for students while solving labs or building new pages.</p><p>⬅ Back to JavaScript main page: <a href="/js">JavaScript main page</a>.</p><pre><code>// Open modal
 function openAuthModal() {
   document.getElementById("authBackdrop")
     .classList.add("active");
 }
 
-// ربط زر "Sign In"
+// Bind "Sign In" button
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("signInBtn");
   if (btn) btn.addEventListener("click", openAuthModal);

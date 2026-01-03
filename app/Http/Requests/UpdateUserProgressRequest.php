@@ -24,11 +24,11 @@ class UpdateUserProgressRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'معرف المستخدم مطلوب',
-            'user_id.exists' => 'المستخدم غير موجود',
-            'progress_percent.required' => 'نسبة التقدم مطلوبة',
-            'progress_percent.min' => 'نسبة التقدم يجب أن تكون 0 أو أكثر',
-            'progress_percent.max' => 'نسبة التقدم يجب أن تكون 100 أو أقل',
+            'user_id.required' => 'User ID is required',
+            'user_id.exists' => 'User does not exist',
+            'progress_percent.required' => 'Progress percentage is required',
+            'progress_percent.min' => 'Progress percentage must be 0 or more',
+            'progress_percent.max' => 'Progress percentage must be 100 or less',
         ];
     }
 }

@@ -19,13 +19,13 @@ class CertificateController extends Controller
 
         if (!$user) {
             return redirect()->route('auth.login')
-                ->with('error', 'يجب تسجيل الدخول لعرض الشهادة');
+                ->with('error', 'You must be logged in to view the certificate');
         }
 
         // Check if track is completed
         if (!$this->isTrackCompleted($user, $track)) {
             return redirect()->back()
-                ->with('error', 'يجب إكمال المسار أولاً للحصول على الشهادة');
+                ->with('error', 'You must complete the track first to get the certificate');
         }
 
         // Get or create certificate
@@ -52,13 +52,13 @@ class CertificateController extends Controller
 
         if (!$user) {
             return redirect()->route('auth.login')
-                ->with('error', 'يجب تسجيل الدخول لتحميل الشهادة');
+                ->with('error', 'You must be logged in to download the certificate');
         }
 
         // Check if track is completed
         if (!$this->isTrackCompleted($user, $track)) {
             return redirect()->back()
-                ->with('error', 'يجب إكمال المسار أولاً للحصول على الشهادة');
+                ->with('error', 'You must complete the track first to get the certificate');
         }
 
         // Get or create certificate
@@ -95,7 +95,7 @@ class CertificateController extends Controller
 
         if (!$user) {
             return redirect()->route('auth.login')
-                ->with('error', 'يجب تسجيل الدخول لعرض الشهادات');
+                ->with('error', 'You must be logged in to view certificates');
         }
 
         $certificates = $user->certificates()->with('track')->latest('issued_at')->get();

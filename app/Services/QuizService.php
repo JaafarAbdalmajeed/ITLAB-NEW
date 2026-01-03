@@ -33,6 +33,13 @@ class QuizService
             if ($score > $existingResult->score) {
                 $existingResult->update(['score' => $score]);
                 Log::info("Quiz result updated for user {$user->id}, quiz {$quiz->id}, new score: {$score}");
+                
+                // Clear leaderboard cache for quiz average
+                try {
+                    app(\App\Services\LeaderboardService::class)->clearCache('quiz_average');
+                } catch (\Exception $e) {
+                    // Ignore if LeaderboardService is not available
+                }
             }
             
             return [
@@ -49,6 +56,13 @@ class QuizService
         ]);
 
         Log::info("Quiz result created for user {$user->id}, quiz {$quiz->id}, score: {$score}");
+
+        // Clear leaderboard cache for quiz average
+        try {
+            app(\App\Services\LeaderboardService::class)->clearCache('quiz_average');
+        } catch (\Exception $e) {
+            // Ignore if LeaderboardService is not available
+        }
 
         // Fire event
         event(new QuizSubmitted($result));

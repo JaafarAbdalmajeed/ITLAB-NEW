@@ -140,8 +140,8 @@
 
         <div class="hero-buttons">
             @if($track->show_track ?? true)
-                <button class="btn-main" onclick="location.href='{{ route('tracks.show', $track) }}'">
-                    Learn {{ $track->title }}
+                <button class="btn-main" onclick="location.href='{{ $track->getTrackRoute() }}'">
+                    <i class="fa-solid fa-book"></i> View Lessons
                 </button>
             @endif
 

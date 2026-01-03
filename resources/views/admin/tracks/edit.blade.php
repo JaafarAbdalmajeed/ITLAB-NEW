@@ -126,10 +126,10 @@
     <div class="tabs-container">
         <div class="tabs-nav">
             <button type="button" class="tab-button active" onclick="switchTab('basic')">
-                <i class="fas fa-info-circle"></i> المعلومات الأساسية
+                <i class="fas fa-info-circle"></i> Basic Information
             </button>
             <button type="button" class="tab-button" onclick="switchTab('quizzes')">
-                <i class="fas fa-question-circle"></i> الاختبارات (Quizzes)
+                <i class="fas fa-question-circle"></i> Quizzes
             </button>
         </div>
     </div>
@@ -277,9 +277,9 @@
     <!-- Tab 2: Quizzes Management -->
     <div id="tab-quizzes" class="tab-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">إدارة الاختبارات</h2>
+            <h2 style="margin: 0;">Quiz Management</h2>
             <a href="{{ route('admin.tracks.quizzes.create', $track) }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> إضافة اختبار جديد
+                <i class="fas fa-plus"></i> Add New Quiz
             </a>
         </div>
 
@@ -293,20 +293,20 @@
                     <div class="quiz-header">
                         <div>
                             <div class="quiz-title">{{ $quiz->title }}</div>
-                            <small style="color: #666;">عدد الأسئلة: {{ $quiz->questions->count() }}</small>
+                            <small style="color: #666;">Questions: {{ $quiz->questions->count() }}</small>
                         </div>
                         <div class="quiz-actions">
                             <a href="{{ route('admin.tracks.quizzes.questions.create', [$track, $quiz]) }}" class="btn btn-primary" style="padding: 8px 15px; font-size: 13px;">
-                                <i class="fas fa-plus"></i> إضافة سؤال
+                                <i class="fas fa-plus"></i> Add Question
                             </a>
                             <a href="{{ route('admin.tracks.quizzes.edit', [$track, $quiz]) }}" class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;">
-                                <i class="fas fa-edit"></i> تعديل
+                                <i class="fas fa-edit"></i> Edit
                             </a>
-                            <form action="{{ route('admin.tracks.quizzes.destroy', [$track, $quiz]) }}" method="POST" style="display: inline;" onsubmit="return confirm('هل أنت متأكد من حذف هذا الاختبار؟')">
+                            <form action="{{ route('admin.tracks.quizzes.destroy', [$track, $quiz]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this quiz?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" style="padding: 8px 15px; font-size: 13px;">
-                                    <i class="fas fa-trash"></i> حذف
+                                    <i class="fas fa-trash"></i> Delete
                                 </button>
                             </form>
                         </div>
@@ -314,7 +314,7 @@
 
                     @if($quiz->questions->count() > 0)
                         <div class="questions-list">
-                            <h4 style="margin-bottom: 15px; font-size: 14px; color: #666;">الأسئلة:</h4>
+                            <h4 style="margin-bottom: 15px; font-size: 14px; color: #666;">Questions:</h4>
                             @foreach($quiz->questions as $question)
                                 <div class="question-item">
                                     <div class="question-header">
@@ -325,7 +325,7 @@
                                             <a href="{{ route('admin.tracks.quizzes.questions.edit', [$track, $quiz, $question]) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.tracks.quizzes.questions.destroy', [$track, $quiz, $question]) }}" method="POST" style="display: inline;" onsubmit="return confirm('هل أنت متأكد من حذف هذا السؤال؟')">
+                                            <form action="{{ route('admin.tracks.quizzes.questions.destroy', [$track, $quiz, $question]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this question?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">
@@ -350,9 +350,9 @@
                         </div>
                     @else
                         <div style="text-align: center; padding: 20px; color: #999;">
-                            <p>لا توجد أسئلة في هذا الاختبار</p>
+                            <p>No questions in this quiz</p>
                             <a href="{{ route('admin.tracks.quizzes.questions.create', [$track, $quiz]) }}" class="btn btn-primary" style="margin-top: 10px;">
-                                <i class="fas fa-plus"></i> إضافة أول سؤال
+                                <i class="fas fa-plus"></i> Add First Question
                             </a>
                         </div>
                     @endif
@@ -361,9 +361,9 @@
         @else
             <div style="text-align: center; padding: 40px; background: #fafafa; border-radius: 8px; border: 1px dashed var(--admin-border);">
                 <i class="fas fa-question-circle" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
-                <p style="color: #666; margin-bottom: 20px;">لا توجد اختبارات لهذا المسار</p>
+                <p style="color: #666; margin-bottom: 20px;">No quizzes for this track</p>
                 <a href="{{ route('admin.tracks.quizzes.create', $track) }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> إضافة اختبار جديد
+                    <i class="fas fa-plus"></i> Add New Quiz
                 </a>
             </div>
         @endif

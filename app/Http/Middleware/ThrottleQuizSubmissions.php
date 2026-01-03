@@ -22,7 +22,7 @@ class ThrottleQuizSubmissions
             $seconds = RateLimiter::availableIn($key);
             
             return response()->json([
-                'error' => 'تم تجاوز الحد المسموح. يرجى المحاولة مرة أخرى بعد ' . $seconds . ' ثانية.'
+                'error' => 'Rate limit exceeded. Please try again after ' . $seconds . ' seconds.'
             ], 429);
         }
 

@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Events\TrackCompleted;
+use App\Events\LessonCompleted;
 use App\Models\Track;
+use App\Models\Lesson;
 use App\Models\User;
 use App\Models\UserProgress;
 use Illuminate\Support\Facades\Log;
@@ -14,8 +16,12 @@ class ProgressService
     /**
      * Update or create user progress for a track
      */
-    public function updateProgress(User $user, Track $track, int $progressPercent): UserProgress
+    public function updateProgress(User $user, Track $track, int $progressPercent, ?Lesson $lesson = null): UserProgress
     {
+        $wasNew = !UserProgress::where('user_id', $user->id)
+            ->where('track_id', $track->id)
+            ->exists();
+
         $progress = UserProgress::updateOrCreate(
             [
                 'user_id' => $user->id,
@@ -27,6 +33,11 @@ class ProgressService
         );
 
         Log::info("Progress updated for user {$user->id}, track {$track->id}, progress: {$progressPercent}%");
+
+        // If this is the first time user has progress on this track, trigger lesson completion
+        if ($wasNew && $lesson) {
+            event(new LessonCompleted($user, $lesson));
+        }
 
         return $progress;
     }
@@ -104,6 +115,15 @@ class ProgressService
     {
         $this->updateProgress($user, $track, 100);
         Log::info("Track {$track->id} marked as completed for user {$user->id}");
+        
+        // Clear leaderboard cache
+        try {
+            $leaderboardService = app(\App\Services\LeaderboardService::class);
+            $leaderboardService->clearCache('tracks');
+            $leaderboardService->clearCache('certificates');
+        } catch (\Exception $e) {
+            // Ignore if LeaderboardService is not available
+        }
         
         // Fire event
         event(new TrackCompleted($user, $track));

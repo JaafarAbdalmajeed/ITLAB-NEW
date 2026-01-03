@@ -16,30 +16,30 @@
     />
 
     <main class="main-content" style="background: #0f0f0f; min-height: 100vh; padding: 30px;">
-        <div class="content-header mb-5" dir="rtl">
+        <div class="content-header mb-5">
             <h1 style="color: #00ffaa; font-size: 2.2rem; font-weight: bold;">
-                <i class="fa-solid fa-play-circle me-2"></i> فيديوهات مسار {{ $track->title }}
+                <i class="fa-solid fa-play-circle me-2"></i> {{ $track->title }} Videos
             </h1>
             <a href="{{ $track->getMainRoute() }}" class="back-link">
-                <i class="fa-solid fa-arrow-right ms-2"></i> عودة إلى قائمة الدروس
+                <i class="fa-solid fa-arrow-left me-2"></i> Back to Track
             </a>
         </div>
 
-        <div class="row g-4" dir="rtl">
+        <div class="row g-4">
             @php
-                // مصفوفة الفيديوهات - يمكنك تغيير الـ ID لكل فيديو من يوتيوب
+                // Videos array - you can change the YouTube ID for each video
                 $trackVideos = [
-                    ['t' => 'الدرس الأول: مقدمة في ' . $track->title, 'id' => 'PLDoPjvoNmBAwXDFEGst8SUHZuVnS866No', 'c' => '#00ffaa'],
-                    ['t' => 'الدرس الثاني: التثبيت والبيئة البرمجية', 'id' => 'abc1', 'c' => '#61dafb'],
-                    ['t' => 'الدرس الثالث: المفاهيم الأساسية والأدوات', 'id' => 'abc2', 'c' => '#ff5252'],
-                    ['t' => 'الدرس الرابع: التطبيق العملي الأول', 'id' => 'abc3', 'c' => '#ffeb3b'],
-                    ['t' => 'الدرس الخامس: نصائح متقدمة وحل المشكلات', 'id' => 'abc4', 'c' => '#e040fb'],
+                    ['t' => 'Lesson 1: Introduction to ' . $track->title, 'id' => 'PLDoPjvoNmBAwXDFEGst8SUHZuVnS866No', 'c' => '#00ffaa'],
+                    ['t' => 'Lesson 2: Installation and Development Environment', 'id' => 'abc1', 'c' => '#61dafb'],
+                    ['t' => 'Lesson 3: Basic Concepts and Tools', 'id' => 'abc2', 'c' => '#ff5252'],
+                    ['t' => 'Lesson 4: First Practical Application', 'id' => 'abc3', 'c' => '#ffeb3b'],
+                    ['t' => 'Lesson 5: Advanced Tips and Problem Solving', 'id' => 'abc4', 'c' => '#e040fb'],
                 ];
             @endphp
 
             @foreach($trackVideos as $index => $video)
             <div class="col-12 mb-4">
-                <div class="video-container-card shadow-lg" style="border-right: 12px solid {{ $video['c'] }}; background: #1a1a1a; border-radius: 20px; overflow: hidden; border: 1px solid #333;">
+                <div class="video-container-card shadow-lg" style="border-left: 12px solid {{ $video['c'] }}; background: #1a1a1a; border-radius: 20px; overflow: hidden; border: 1px solid #333;">
                     <div class="row g-0">
                         <div class="col-lg-7">
                             <div class="ratio ratio-16x9">
@@ -50,14 +50,14 @@
                                 </iframe>
                             </div>
                         </div>
-                        <div class="col-lg-5 p-4 d-flex flex-column justify-content-center text-end">
+                        <div class="col-lg-5 p-4 d-flex flex-column justify-content-center">
                             <h3 style="color: {{ $video['c'] }}; font-weight: bold; margin-bottom: 15px;">{{ $video['t'] }}</h3>
-                            <p style="color: #bbb; line-height: 1.6;">شاهد هذا الدرس لتتعلم كيفية تطبيق المهارات العملية لهذا المسار خطوة بخطوة مع المدرب.</p>
+                            <p style="color: #bbb; line-height: 1.6;">Watch this lesson to learn how to apply the practical skills of this track step by step with the instructor.</p>
                             
-                            <div class="mt-4 d-flex align-items-center gap-2 justify-content-end">
-                                <span class="badge" style="background: {{ $video['c'] }}; color: #000; padding: 8px 15px;">الفيديو #{{ $index + 1 }}</span>
+                            <div class="mt-4 d-flex align-items-center gap-2">
+                                <span class="badge" style="background: {{ $video['c'] }}; color: #000; padding: 8px 15px;">Video #{{ $index + 1 }}</span>
                                 <a href="https://youtube.com/watch?v={{ $video['id'] }}" target="_blank" class="btn btn-sm btn-outline-secondary">
-                                    <i class="fab fa-youtube text-danger ms-1"></i> يوتيوب
+                                    <i class="fab fa-youtube text-danger me-1"></i> YouTube
                                 </a>
                             </div>
                         </div>

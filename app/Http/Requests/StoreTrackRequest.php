@@ -23,9 +23,9 @@ class StoreTrackRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'slug.required' => 'الرابط (Slug) مطلوب',
-            'slug.unique' => 'هذا الرابط مستخدم بالفعل',
-            'title.required' => 'العنوان مطلوب',
+            'slug.required' => 'Slug is required',
+            'slug.unique' => 'This slug is already in use',
+            'title.required' => 'Title is required',
         ];
     }
 }

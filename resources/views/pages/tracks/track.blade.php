@@ -21,16 +21,38 @@
         </p>
 
         <div class="example-card" style="max-width:520px;">
-            <div class="example-title">Modules in this track</div>
+            @php
+                $orderedLessons = $track->lessons->sortBy('order')->values();
+            @endphp
+            <div class="example-title">Lessons in this track ({{ $orderedLessons->count() }})</div>
             <div class="example-inner">
-                @if($track->lessons->isEmpty())
+                @if($orderedLessons->isEmpty())
                     <p>No lessons yet. Check back later.</p>
                 @else
-                    <ul>
-                        @foreach($track->lessons as $lesson)
-                            <li>
-                                <b>{{ $lesson->order }}.</b> 
-                                <a href="{{ route('tracks.lessons.show', [$track, $lesson]) }}">{{ $lesson->title }}</a>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        @foreach($orderedLessons as $lesson)
+                            @php
+                                $isCompleted = auth()->check() ? $lesson->isCompletedByUser(auth()->id()) : false;
+                            @endphp
+                            <li style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px;">
+                                <div style="flex: 1;">
+                                    <a href="{{ route('tracks.lessons.show', [$track, $lesson]) }}" 
+                                       style="text-decoration: none; color: inherit; font-weight: 500; display: flex; align-items: center; gap: 8px;">
+                                        <span style="color: #666; font-weight: 600; min-width: 30px;">{{ $lesson->order }}.</span>
+                                        <span>{{ $lesson->title }}</span>
+                                    </a>
+                                </div>
+                                @if(auth()->check())
+                                    @if($isCompleted)
+                                        <span style="color: #10b981; font-size: 18px;" title="Completed">
+                                            <i class="fa-solid fa-check-circle"></i>
+                                        </span>
+                                    @else
+                                        <span style="color: #ccc; font-size: 18px;" title="Not completed">
+                                            <i class="fa-regular fa-circle"></i>
+                                        </span>
+                                    @endif
+                                @endif
                             </li>
                         @endforeach
                     </ul>
@@ -66,6 +88,12 @@
             </div>
         </div>
     </div>
+</section>
+
+<!-- Ratings & Reviews Section -->
+<section style="max-width: 1200px; margin: 40px auto; padding: 0 24px;">
+    <x-ratings :track="$track" />
+    <x-reviews :track="$track" />
 </section>
 
 @push('scripts')

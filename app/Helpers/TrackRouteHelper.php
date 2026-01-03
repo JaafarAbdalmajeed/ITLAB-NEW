@@ -8,106 +8,178 @@ use Illuminate\Support\Facades\Route;
 class TrackRouteHelper
 {
     /**
-     * Get the main route for a track
+     * Special tracks with custom routes (for backward compatibility)
+     */
+    private static function getSpecialTrackRoutes(): array
+    {
+        return [
+            'html' => [
+                'main' => 'pages.html',
+                'track' => 'pages.html.track',
+                'tutorial' => 'pages.html.tutorial',
+                'reference' => 'pages.html.reference',
+                'videos' => 'pages.html.videos',
+                'labs' => 'pages.html.labs',
+                'quiz' => 'pages.html.quiz',
+            ],
+            'css' => [
+                'main' => 'pages.css',
+                'track' => 'pages.css.track',
+                'tutorial' => 'pages.css.tutorial',
+                'reference' => 'pages.css.reference',
+                'videos' => 'pages.css.videos',
+                'labs' => 'pages.css.labs',
+                'quiz' => 'pages.css.quiz',
+            ],
+            'js' => [
+                'main' => 'pages.js',
+                'track' => 'pages.js.track',
+                'tutorial' => 'pages.js.tutorial',
+                'reference' => 'pages.js.reference',
+                'videos' => 'pages.js.videos',
+                'labs' => 'pages.js.labs',
+                'quiz' => 'pages.js.quiz',
+            ],
+            'java' => [
+                'main' => 'pages.java',
+                'track' => 'pages.java.track',
+                'tutorial' => 'pages.java.tutorial',
+                'reference' => 'pages.java.reference',
+                'videos' => 'pages.java.videos',
+                'labs' => 'pages.java.labs',
+                'quiz' => 'pages.java.quiz',
+            ],
+            'cyber-network' => [
+                'main' => 'pages.cyber-network',
+                'track' => 'pages.cyber-network.track',
+                'tutorial' => 'pages.cyber-network.tutorial',
+                'reference' => 'pages.cyber-network.reference',
+                'videos' => 'pages.cyber-network.videos',
+                'labs' => 'pages.cyber-network.labs',
+                'quiz' => 'pages.cyber-network.quiz',
+            ],
+            'cyber-web' => [
+                'main' => 'pages.cyber-web',
+                'track' => 'pages.cyber-web.track',
+                'tutorial' => 'pages.cyber-web.tutorial',
+                'reference' => 'pages.cyber-web.reference',
+                'videos' => 'pages.cyber-web.videos',
+                'labs' => 'pages.cyber-web.labs',
+                'quiz' => 'pages.cyber-web.quiz',
+            ],
+        ];
+    }
+
+    /**
+     * Get the main route for a track (dynamic for all tracks)
      */
     public static function getMainRoute(Track $track): string
     {
-        return match($track->slug) {
-            'html' => route('pages.html'),
-            'css' => route('pages.css'), // Uses /learn-css route
-            'js' => route('pages.js'), // Uses /learn-js route
-            'cyber-network' => route('pages.cyber-network'),
-            'cyber-web' => route('pages.cyber-web'),
-            default => route('tracks.show', $track),
-        };
+        $specialRoutes = self::getSpecialTrackRoutes();
+        
+        if (isset($specialRoutes[$track->slug])) {
+            return route($specialRoutes[$track->slug]['main']);
+        }
+        
+        // Dynamic route for any new track added from admin
+        return route('pages.track.main', $track);
     }
 
     /**
-     * Get the track/lessons route
+     * Get the track/lessons route (dynamic for all tracks)
      */
     public static function getTrackRoute(Track $track): string
     {
-        return match($track->slug) {
-            'html' => route('pages.html.track'),
-            'css' => route('pages.css.track'),
-            'js' => route('pages.js.track'),
-            default => route('tracks.show', $track),
-        };
+        $specialRoutes = self::getSpecialTrackRoutes();
+        
+        if (isset($specialRoutes[$track->slug])) {
+            return route($specialRoutes[$track->slug]['track']);
+        }
+        
+        // Dynamic route for any new track added from admin
+        return route('pages.track.lessons', $track);
     }
 
     /**
-     * Get the tutorial route
+     * Get the tutorial route (dynamic for all tracks)
      */
     public static function getTutorialRoute(Track $track): string
     {
-        return match($track->slug) {
-            'html' => route('pages.html.tutorial'),
-            'css' => route('pages.css.tutorial'),
-            'js' => route('pages.js.tutorial'),
-            'cyber-network' => route('pages.cyber-network.tutorial'),
-            'cyber-web' => route('pages.cyber-web.tutorial'),
-            default => $track->getMainRoute(), // Use main route as fallback
-        };
+        $specialRoutes = self::getSpecialTrackRoutes();
+        
+        if (isset($specialRoutes[$track->slug])) {
+            return route($specialRoutes[$track->slug]['tutorial']);
+        }
+        
+        // Dynamic route for any new track added from admin
+        return route('pages.track.tutorial', $track);
     }
 
     /**
-     * Get the reference route
+     * Get the reference route (dynamic for all tracks)
      */
     public static function getReferenceRoute(Track $track): string
     {
-        return match($track->slug) {
-            'html' => route('pages.html.reference'),
-            'css' => route('pages.css.reference'),
-            'js' => route('pages.js.reference'),
-            'cyber-network' => route('pages.cyber-network.reference'),
-            'cyber-web' => route('pages.cyber-web.reference'),
-            default => $track->getMainRoute(), // Use main route as fallback
-        };
+        $specialRoutes = self::getSpecialTrackRoutes();
+        
+        if (isset($specialRoutes[$track->slug])) {
+            return route($specialRoutes[$track->slug]['reference']);
+        }
+        
+        // Dynamic route for any new track added from admin
+        return route('pages.track.reference', $track);
     }
 
     /**
-     * Get the videos route
+     * Get the videos route (dynamic for all tracks)
      */
     public static function getVideosRoute(Track $track): string
     {
-        return match($track->slug) {
-            'html' => route('pages.html.videos'),
-            'css' => route('pages.css.videos'),
-            'js' => route('pages.js.videos'),
-            'cyber-network' => route('pages.cyber-network.videos'),
-            'cyber-web' => route('pages.cyber-web.videos'),
-            default => $track->getMainRoute(), // Use main route as fallback
-        };
+        $specialRoutes = self::getSpecialTrackRoutes();
+        
+        if (isset($specialRoutes[$track->slug])) {
+            return route($specialRoutes[$track->slug]['videos']);
+        }
+        
+        // Dynamic route for any new track added from admin
+        return route('pages.track.videos', $track);
     }
 
     /**
-     * Get the labs route
+     * Get the labs route (dynamic for all tracks)
      */
     public static function getLabsRoute(Track $track): string
     {
-        return match($track->slug) {
-            'html' => route('pages.html.labs'),
-            'css' => route('pages.css.labs'),
-            'js' => route('pages.js.labs'),
-            'cyber-network' => route('pages.cyber-network.labs'),
-            'cyber-web' => route('pages.cyber-web.labs'),
-            default => route('tracks.labs.index', $track), // Use general route for other tracks
-        };
+        $specialRoutes = self::getSpecialTrackRoutes();
+        
+        if (isset($specialRoutes[$track->slug])) {
+            return route($specialRoutes[$track->slug]['labs']);
+        }
+        
+        // Dynamic route for any new track added from admin
+        try {
+            return route('pages.track.labs', $track);
+        } catch (\Exception $e) {
+            return $track->getMainRoute();
+        }
     }
 
     /**
-     * Get the quiz route
+     * Get the quiz route (dynamic for all tracks)
      */
     public static function getQuizRoute(Track $track): string
     {
-        return match($track->slug) {
-            'html' => route('pages.html.quiz'),
-            'css' => route('pages.css.quiz'),
-            'js' => route('pages.js.quiz'),
-            'cyber-network' => route('pages.cyber-network.quiz'),
-            'cyber-web' => route('pages.cyber-web.quiz'),
-            default => route('tracks.quizzes.index', $track), // Use general route for other tracks
-        };
+        $specialRoutes = self::getSpecialTrackRoutes();
+        
+        if (isset($specialRoutes[$track->slug])) {
+            return route($specialRoutes[$track->slug]['quiz']);
+        }
+        
+        // Dynamic route for any new track added from admin
+        try {
+            return route('pages.track.quiz', $track);
+        } catch (\Exception $e) {
+            return $track->getMainRoute();
+        }
     }
 }
-

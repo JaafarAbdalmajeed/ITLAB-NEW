@@ -29,4 +29,47 @@ class Lesson extends Model
     {
         return $this->belongsTo(Track::class);
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function userProgress()
+    {
+        return $this->hasMany(UserLessonProgress::class);
+    }
+
+    /**
+     * Check if lesson is completed by user
+     */
+    public function isCompletedByUser(?int $userId): bool
+    {
+        if (!$userId) {
+            return false;
+        }
+
+        return UserLessonProgress::isLessonCompleted($userId, $this->id);
+    }
+
+    /**
+     * Get average rating for this lesson
+     */
+    public function getAverageRatingAttribute(): float
+    {
+        return Rating::getAverageForLesson($this->id);
+    }
+
+    /**
+     * Get rating count for this lesson
+     */
+    public function getRatingCountAttribute(): int
+    {
+        return Rating::getCountForLesson($this->id);
+    }
 }

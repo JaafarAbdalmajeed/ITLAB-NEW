@@ -211,10 +211,24 @@
 
   <!-- DASHBOARD CONTENT -->
   <main class="dashboard-section">
-    <h1 class="hero-heading">Student Dashboard</h1>
-    <p class="hero-subtitle">
-      Overview of your progress in Programming and Cyber Security tracks on ITLAB.
-    </p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <h1 class="hero-heading">Student Dashboard</h1>
+        <p class="hero-subtitle">
+          Overview of your progress in Programming and Cyber Security tracks on ITLAB.
+        </p>
+      </div>
+      @auth
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="{{ route('achievements.index') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; text-decoration: none; border-radius: 12px; font-weight: 500; font-size: 14px; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(59, 130, 246, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)'">
+          🏆 Achievements
+        </a>
+        <a href="{{ route('leaderboard.index') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; text-decoration: none; border-radius: 12px; font-weight: 500; font-size: 14px; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(245, 158, 11, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(245, 158, 11, 0.3)'">
+          📊 Leaderboard
+        </a>
+      </div>
+      @endauth
+    </div>
 
     <!-- Summary cards -->
     <section class="dash-summary">

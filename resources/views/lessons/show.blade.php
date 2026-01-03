@@ -290,7 +290,7 @@
             </div>
         @endif
 
-        <!-- Navigation between lessons -->
+        <!-- Lesson Completion & Navigation -->
         @php
             $allLessons = $track->lessons()->orderBy('order')->get();
             $currentIndex = $allLessons->search(function($l) use ($lesson) {
@@ -300,6 +300,24 @@
             $nextLesson = $currentIndex < $allLessons->count() - 1 ? $allLessons[$currentIndex + 1] : null;
         @endphp
 
+        <!-- Mark as Complete Button -->
+        @auth
+        <div style="padding: 24px; background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 8px; margin-bottom: 24px; text-align: center;">
+            @if($isCompleted)
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: #10b981; font-weight: 600;">
+                    <i class="fa-solid fa-check-circle" style="font-size: 20px;"></i>
+                    <span>Lesson Completed!</span>
+                </div>
+            @else
+                <button id="mark-complete-btn" onclick="markLessonComplete()" 
+                        style="padding: 12px 32px; background: #04aa6d; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    <i class="fa-solid fa-check"></i> Mark as Complete
+                </button>
+            @endif
+        </div>
+        @endauth
+
+        <!-- Navigation between lessons -->
         <div style="display: flex; justify-content: space-between; gap: 16px; padding-top: 24px; border-top: 1px solid var(--border, #e5e7eb);">
             @if($prevLesson)
                 <a href="{{ route('tracks.lessons.show', [$track, $prevLesson]) }}" 
@@ -316,13 +334,19 @@
 
             @if($nextLesson)
                 <a href="{{ route('tracks.lessons.show', [$track, $nextLesson]) }}" 
-                   style="display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 8px; text-decoration: none; color: var(--text); transition: all 0.2s; margin-left: auto;">
+                   id="next-lesson-btn"
+                   style="display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: #04aa6d; color: white; border: none; border-radius: 8px; text-decoration: none; transition: all 0.2s; margin-left: auto; font-weight: 600;">
                     <div style="text-align: right;">
-                        <div style="font-size: 12px; color: var(--muted);">Next</div>
+                        <div style="font-size: 12px; opacity: 0.9;">Next Lesson</div>
                         <div style="font-weight: 500;">{{ $nextLesson->title }}</div>
                     </div>
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
+            @else
+                <div style="display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: #667eea; color: white; border-radius: 8px; margin-left: auto; font-weight: 600;">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Track Completed!</span>
+                </div>
             @endif
         </div>
     </main>
@@ -331,6 +355,56 @@
 @push('scripts')
 <script src="{{ asset('js/script.js') }}"></script>
 <script src="{{ asset('js/sidebar.js') }}"></script>
+@auth
+<script>
+function markLessonComplete() {
+    const btn = document.getElementById('mark-complete-btn');
+    if (!btn) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+    fetch('{{ route('tracks.lessons.complete', [$track, $lesson]) }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            btn.parentElement.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: #10b981; font-weight: 600;">
+                    <i class="fa-solid fa-check-circle" style="font-size: 20px;"></i>
+                    <span>Lesson Completed!</span>
+                </div>
+            `;
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 15px 20px; border-radius: 8px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+            successMsg.innerHTML = '<i class="fa-solid fa-check"></i> Lesson marked as complete!';
+            document.body.appendChild(successMsg);
+            
+            setTimeout(() => {
+                successMsg.remove();
+            }, 3000);
+        } else {
+            alert(data.message || 'Error marking lesson as complete');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Mark as Complete';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Mark as Complete';
+    });
+}
+</script>
+@endauth
 @if($lesson->enable_code_editor)
 <script>
 function runCode() {

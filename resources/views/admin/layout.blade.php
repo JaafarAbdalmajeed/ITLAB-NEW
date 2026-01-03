@@ -482,6 +482,10 @@
                     <i class="fas fa-chart-bar"></i>
                     Statistics
                 </a>
+                <a href="{{ route('admin.home-background.edit') }}" class="admin-nav-item {{ request()->routeIs('admin.home-background.*') ? 'active' : '' }}">
+                    <i class="fas fa-image"></i>
+                    Home Background
+                </a>
                 <a href="{{ route('home') }}" class="admin-nav-item">
                     <i class="fas fa-globe"></i>
                     Main Site

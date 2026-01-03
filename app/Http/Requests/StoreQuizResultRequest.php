@@ -23,8 +23,8 @@ class StoreQuizResultRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'answers.required' => 'يجب إرسال الإجابات',
-            'answers.*.in' => 'الإجابة يجب أن تكون أ، ب، أو ج',
+            'answers.required' => 'Answers must be submitted',
+            'answers.*.in' => 'Answer must be a, b, or c',
         ];
     }
 }

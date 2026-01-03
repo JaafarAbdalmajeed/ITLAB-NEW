@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'شهاداتي — ITLAB')
+@section('title', 'My Certificates — ITLAB')
 @section('body-class', 'page-certificates')
 
 @section('content')
@@ -163,8 +163,8 @@
 
 <div class="certificates-container">
     <div class="certificates-header">
-        <h1>شهاداتي</h1>
-        <p>جميع الشهادات التي حصلت عليها</p>
+        <h1>My Certificates</h1>
+        <p>All certificates you have earned</p>
     </div>
 
     @if(session('success'))
@@ -187,16 +187,16 @@
                         <i class="fas fa-certificate"></i>
                     </div>
                     <div class="certificate-title">{{ $certificate->track->title }}</div>
-                    <div class="certificate-number">رقم الشهادة: {{ $certificate->certificate_number }}</div>
+                    <div class="certificate-number">Certificate No: {{ $certificate->certificate_number }}</div>
                     <div class="certificate-date">
-                        تاريخ الإصدار: {{ $certificate->issued_at->format('Y/m/d') }}
+                        Issued on: {{ $certificate->issued_at->format('Y/m/d') }}
                     </div>
                     <div class="certificate-actions">
                         <a href="{{ route('tracks.certificate.show', $certificate->track) }}" class="btn-view">
-                            <i class="fas fa-eye"></i> عرض
+                            <i class="fas fa-eye"></i> View
                         </a>
                         <a href="{{ route('tracks.certificate.download', $certificate->track) }}" class="btn-download" target="_blank">
-                            <i class="fas fa-download"></i> تحميل
+                            <i class="fas fa-download"></i> Download
                         </a>
                     </div>
                 </div>
@@ -207,10 +207,10 @@
             <div class="no-certificates-icon">
                 <i class="fas fa-certificate"></i>
             </div>
-            <h2>لا توجد شهادات بعد</h2>
-            <p>أكمل المسارات للحصول على الشهادات</p>
+            <h2>No Certificates Yet</h2>
+            <p>Complete tracks to earn certificates</p>
             <a href="{{ route('home') }}" class="btn-view" style="text-decoration: none;">
-                <i class="fas fa-arrow-left"></i> العودة للصفحة الرئيسية
+                <i class="fas fa-arrow-left"></i> Back to Home
             </a>
         </div>
     @endif

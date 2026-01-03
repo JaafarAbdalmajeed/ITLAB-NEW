@@ -154,10 +154,10 @@
                 </div>
                 <div class="sidebar-section-content {{ $currentPage === 'certificate' ? 'active' : '' }}" id="certificateContent">
                     <a href="{{ route('tracks.certificate.show', $currentTrack) }}" class="sidebar-link {{ $currentPage === 'certificate' ? 'active' : '' }}">
-                        <i class="fas fa-certificate"></i> عرض الشهادة
+                        <i class="fas fa-certificate"></i> View Certificate
                     </a>
                     <a href="{{ route('tracks.certificate.download', $currentTrack) }}" class="sidebar-link" target="_blank">
-                        <i class="fas fa-download"></i> تحميل الشهادة
+                        <i class="fas fa-download"></i> Download Certificate
                     </a>
                 </div>
             </div>

@@ -33,7 +33,9 @@ class PagesController extends Controller
 
     public function htmlTrack()
     {
-        $track = Track::where('slug', 'html')->with(['lessons'])->firstOrFail();
+        $track = Track::where('slug', 'html')->with(['lessons' => function($query) {
+            $query->orderBy('order');
+        }])->firstOrFail();
         return view('pages.tracks.track', compact('track'));
     }
 
@@ -274,7 +276,9 @@ class PagesController extends Controller
     public function java()
     {
         try {
-            $track = Track::where('slug', 'java')->with(['lessons', 'quizzes', 'labs'])->first();
+            $track = Track::where('slug', 'java')->with(['lessons' => function($query) {
+                $query->orderBy('order');
+            }, 'quizzes', 'labs'])->first();
             
             if (!$track) {
                 // Create default Track if it doesn't exist
@@ -568,5 +572,84 @@ class PagesController extends Controller
             ->firstOrFail();
         
         return view('pages.page', compact('page'));
+    }
+
+    /**
+     * ============================================================================
+     * Dynamic Track Routes - Works for any track added from admin
+     * ============================================================================
+     */
+
+    /**
+     * Dynamic track main page
+     */
+    public function trackMain(Track $track)
+    {
+        $track->load(['lessons' => function($query) {
+            $query->orderBy('order');
+        }, 'quizzes', 'labs']);
+        
+        return view('pages.tracks.main', compact('track'));
+    }
+
+    /**
+     * Dynamic track lessons page
+     */
+    public function trackLessons(Track $track)
+    {
+        $track->load(['lessons' => function($query) {
+            $query->orderBy('order');
+        }]);
+        
+        return view('pages.tracks.track', compact('track'));
+    }
+
+    /**
+     * Dynamic track tutorial page
+     */
+    public function trackTutorial(Track $track)
+    {
+        return view('pages.tracks.tutorial', compact('track'));
+    }
+
+    /**
+     * Dynamic track reference page
+     */
+    public function trackReference(Track $track)
+    {
+        return view('pages.tracks.reference', compact('track'));
+    }
+
+    /**
+     * Dynamic track videos page
+     */
+    public function trackVideos(Track $track)
+    {
+        return view('pages.tracks.videos', compact('track'));
+    }
+
+    /**
+     * Dynamic track labs page
+     */
+    public function trackLabs(Track $track)
+    {
+        $track->load('labs');
+        return view('pages.tracks.labs', compact('track'));
+    }
+
+    /**
+     * Dynamic track quiz page
+     */
+    public function trackQuiz(Track $track)
+    {
+        $track->load(['quizzes.questions']);
+        $quiz = $track->quizzes()->with('questions')->first();
+        
+        if (!$quiz) {
+            return redirect()->route('pages.track.main', $track)
+                ->with('error', 'No quiz available for this track at the moment');
+        }
+        
+        return view('pages.tracks.quiz', compact('track', 'quiz'));
     }
 }

@@ -34,7 +34,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ValidationException $e, $request) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'خطأ في التحقق من البيانات',
+                    'message' => 'Validation error',
                     'errors' => $e->errors(),
                 ], 422);
             }
@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (AuthenticationException $e, $request) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'يجب تسجيل الدخول للوصول إلى هذا المورد',
+                    'message' => 'You must be logged in to access this resource',
                 ], 401);
             }
         });
@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'المورد المطلوب غير موجود',
+                    'message' => 'The requested resource was not found',
                 ], 404);
             }
         });
@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (AccessDeniedHttpException $e, $request) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'غير مصرح لك بالوصول إلى هذا المورد',
+                    'message' => 'You are not authorized to access this resource',
                 ], 403);
             }
         });

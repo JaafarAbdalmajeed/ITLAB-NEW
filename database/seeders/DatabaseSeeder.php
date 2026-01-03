@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             PageSeeder::class,
             AdminUserSeeder::class,
             NavbarItemSeeder::class,
+            AchievementSeeder::class,
         ]);
     }
 }

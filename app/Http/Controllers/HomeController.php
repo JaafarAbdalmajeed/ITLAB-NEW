@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Track;
 use App\Models\Quiz;
+use App\Models\HomeBackgroundSetting;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -81,6 +82,9 @@ class HomeController extends Controller
             ];
         })->values();
 
+        // Get home background settings
+        $backgroundSetting = HomeBackgroundSetting::getActive();
+
         return view('home.index', compact(
             'featured', 
             'recentTracks', 
@@ -90,7 +94,8 @@ class HomeController extends Controller
             'cyberTracks',
             'stats',
             'popularTracks',
-            'searchTracks'
+            'searchTracks',
+            'backgroundSetting'
         ));
     }
 }

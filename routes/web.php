@@ -20,6 +20,10 @@ use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\StatsController as AdminStatsController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
+use App\Http\Controllers\AchievementController;
+use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ReviewController;
 use App\Models\NavbarItem;
 
 // ============================================================================
@@ -88,6 +92,12 @@ Route::get('learn-java/quiz', [PagesController::class, 'javaQuiz'])->name('pages
 
 // Network Security
 Route::get('cyber-network', [CyberController::class, 'network'])->name('pages.cyber-network');
+Route::get('cyber-network/track', function() {
+    $track = \App\Models\Track::where('slug', 'cyber-network')->with(['lessons' => function($query) {
+        $query->orderBy('order');
+    }])->firstOrFail();
+    return view('pages.tracks.track', compact('track'));
+})->name('pages.cyber-network.track');
 Route::get('cyber-network/tutorial', function() {
     $track = \App\Models\Track::where('slug', 'cyber-network')->firstOrFail();
     return view('pages.tracks.tutorial', compact('track'));
@@ -102,6 +112,12 @@ Route::get('cyber-network/quiz', [CyberController::class, 'networkQuiz'])->name(
 
 // Web Security
 Route::get('cyber-web', [CyberController::class, 'web'])->name('pages.cyber-web');
+Route::get('cyber-web/track', function() {
+    $track = \App\Models\Track::where('slug', 'cyber-web')->with(['lessons' => function($query) {
+        $query->orderBy('order');
+    }])->firstOrFail();
+    return view('pages.tracks.track', compact('track'));
+})->name('pages.cyber-web.track');
 Route::get('cyber-web/tutorial', function() {
     $track = \App\Models\Track::where('slug', 'cyber-web')->firstOrFail();
     return view('pages.tracks.tutorial', compact('track'));
@@ -176,6 +192,11 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('pages.sections', \App\Http\Controllers\Admin\PageSectionController::class)->except(['show']);
     Route::post('pages/{page}/sections/update-order', [\App\Http\Controllers\Admin\PageSectionController::class, 'updateOrder'])->name('pages.sections.update-order');
     
+    // Home Background Settings
+    Route::get('home-background', [\App\Http\Controllers\Admin\HomeBackgroundController::class, 'edit'])->name('home-background.edit');
+    Route::put('home-background', [\App\Http\Controllers\Admin\HomeBackgroundController::class, 'update'])->name('home-background.update');
+    Route::delete('home-background', [\App\Http\Controllers\Admin\HomeBackgroundController::class, 'destroy'])->name('home-background.destroy');
+    
     // Navbar Management
     Route::resource('navbar', \App\Http\Controllers\Admin\NavbarController::class)->except(['show']);
     Route::post('navbar/update-order', [\App\Http\Controllers\Admin\NavbarController::class, 'updateOrder'])->name('navbar.update-order');
@@ -203,10 +224,21 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
 // ============================================================================
 // Track Resources (MUST be at the end to avoid conflicts)
 // ============================================================================
+// Dynamic routes for all tracks (works with any track added from admin)
 Route::resource('tracks', TrackController::class);
 Route::resource('tracks.lessons', LessonController::class);
+Route::post('tracks/{track}/lessons/{lesson}/complete', [LessonController::class, 'markComplete'])->name('tracks.lessons.complete');
 Route::resource('tracks.quizzes', QuizController::class);
 Route::resource('tracks.labs', LabController::class);
+
+// Dynamic track pages routes (for any track added from admin)
+Route::get('track/{track:slug}', [PagesController::class, 'trackMain'])->name('pages.track.main');
+Route::get('track/{track:slug}/lessons', [PagesController::class, 'trackLessons'])->name('pages.track.lessons');
+Route::get('track/{track:slug}/tutorial', [PagesController::class, 'trackTutorial'])->name('pages.track.tutorial');
+Route::get('track/{track:slug}/reference', [PagesController::class, 'trackReference'])->name('pages.track.reference');
+Route::get('track/{track:slug}/videos', [PagesController::class, 'trackVideos'])->name('pages.track.videos');
+Route::get('track/{track:slug}/labs', [PagesController::class, 'trackLabs'])->name('pages.track.labs');
+Route::get('track/{track:slug}/quiz', [PagesController::class, 'trackQuiz'])->name('pages.track.quiz');
 
 // Quiz Results
 Route::middleware(['throttle:quiz-submissions'])->group(function () {
@@ -227,6 +259,32 @@ Route::middleware(['auth'])->group(function () {
     Route::get('certificates', [\App\Http\Controllers\CertificateController::class, 'index'])->name('certificates.index');
     Route::get('tracks/{track}/certificate', [\App\Http\Controllers\CertificateController::class, 'show'])->name('tracks.certificate.show');
     Route::get('tracks/{track}/certificate/download', [\App\Http\Controllers\CertificateController::class, 'download'])->name('tracks.certificate.download');
+});
+
+// Achievements
+Route::middleware(['auth'])->group(function () {
+    Route::get('achievements', [AchievementController::class, 'index'])->name('achievements.index');
+    Route::get('api/achievements/progress', [AchievementController::class, 'progress'])->name('achievements.progress');
+    Route::get('api/achievements/recent', [AchievementController::class, 'recent'])->name('achievements.recent');
+});
+
+// Leaderboard
+Route::get('leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
+Route::get('api/leaderboard', [LeaderboardController::class, 'api'])->name('leaderboard.api');
+
+// Ratings
+Route::middleware(['auth'])->group(function () {
+    Route::post('tracks/{track}/ratings', [RatingController::class, 'storeTrack'])->name('tracks.ratings.store');
+    Route::post('tracks/{track}/lessons/{lesson}/ratings', [RatingController::class, 'storeLesson'])->name('tracks.lessons.ratings.store');
+});
+Route::get('tracks/{track}/ratings', [RatingController::class, 'showTrack'])->name('tracks.ratings.show');
+
+// Reviews
+Route::get('tracks/{track}/reviews', [ReviewController::class, 'indexTrack'])->name('tracks.reviews.index');
+Route::middleware(['auth'])->group(function () {
+    Route::post('tracks/{track}/reviews', [ReviewController::class, 'storeTrack'])->name('tracks.reviews.store');
+    Route::post('reviews/{review}/vote', [ReviewController::class, 'vote'])->name('reviews.vote');
+    Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 // ============================================================================

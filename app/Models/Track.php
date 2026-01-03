@@ -43,7 +43,15 @@ class Track extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class)->orderBy('order');
+        return $this->hasMany(Lesson::class);
+    }
+    
+    /**
+     * Get lessons ordered by order field
+     */
+    public function getOrderedLessons()
+    {
+        return $this->lessons()->orderBy('order')->get();
     }
 
     public function quizzes()
@@ -72,6 +80,36 @@ class Track extends Model
     public function scopePublished($query)
     {
         return $query; // For now, all tracks are published
+    }
+
+    /**
+     * Scope tracks by minimum rating
+     */
+    public function scopeWithMinRating($query, float $minRating = 0)
+    {
+        return $query->whereHas('ratings', function ($q) use ($minRating) {
+            $q->selectRaw('track_id, AVG(rating) as avg_rating')
+              ->groupBy('track_id')
+              ->havingRaw('AVG(rating) >= ?', [$minRating]);
+        });
+    }
+
+    /**
+     * Scope tracks ordered by rating
+     */
+    public function scopeOrderByRating($query, string $direction = 'desc')
+    {
+        return $query->withAvg('ratings', 'rating')
+            ->orderBy('ratings_avg_rating', $direction);
+    }
+
+    /**
+     * Scope tracks with minimum number of ratings
+     */
+    public function scopeWithMinRatingsCount($query, int $minCount = 1)
+    {
+        return $query->withCount('ratings')
+            ->having('ratings_count', '>=', $minCount);
     }
 
     /**
@@ -184,6 +222,46 @@ class Track extends Model
     public function videos()
     {
         return $this->hasMany(Video::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get average rating for this track
+     */
+    public function getAverageRatingAttribute(): float
+    {
+        return Rating::getAverageForTrack($this->id);
+    }
+
+    /**
+     * Get rating count for this track
+     */
+    public function getRatingCountAttribute(): int
+    {
+        return Rating::getCountForTrack($this->id);
+    }
+
+    /**
+     * Get user's rating for this track
+     */
+    public function getUserRating(?int $userId = null): ?Rating
+    {
+        $userId = $userId ?? auth()->id();
+        
+        if (!$userId) {
+            return null;
+        }
+
+        return $this->ratings()->where('user_id', $userId)->first();
     }
 }
   

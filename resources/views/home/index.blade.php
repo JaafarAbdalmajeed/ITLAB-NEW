@@ -7,9 +7,41 @@
 @section('content')
   <!-- HERO -->
 <section class="hero relative flex items-center justify-between w-full h-[80vh] min-h-[500px] overflow-hidden" 
-         style="background: url('{{ asset('images/itlab-bg.jpg') }}') no-repeat center center/cover !important;">
+         @php
+            $bgStyle = "background: url('" . asset('images/itlab-bg.jpg') . "') no-repeat center center/cover !important;";
+            if($backgroundSetting && $backgroundSetting->is_active) {
+                if($backgroundSetting->type === 'image' && $backgroundSetting->image_path) {
+                    $bgStyle = "background: url('" . asset('storage/' . $backgroundSetting->image_path) . "') no-repeat center center/cover !important;";
+                } elseif($backgroundSetting->type === 'video' && $backgroundSetting->video_path) {
+                    $bgStyle = "position: relative;";
+                }
+            }
+         @endphp
+         style="{{ $bgStyle }}">
     
-    <div class="absolute inset-0 bg-black/50 z-0"></div>
+    {{-- Video Background --}}
+    @if($backgroundSetting && $backgroundSetting->is_active && $backgroundSetting->type === 'video' && $backgroundSetting->video_path)
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0" style="object-fit: cover;">
+            <source src="{{ asset('storage/' . $backgroundSetting->video_path) }}" type="video/mp4">
+            <source src="{{ asset('storage/' . $backgroundSetting->video_path) }}" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+    @endif
+
+    {{-- Animated Background --}}
+    @if($backgroundSetting && $backgroundSetting->is_active && $backgroundSetting->type === 'animated')
+        @if($backgroundSetting->animated_type === 'css-gradient')
+            <div class="animated-gradient absolute inset-0 z-0"></div>
+        @elseif($backgroundSetting->animated_type === 'css-particles')
+            <div class="animated-particles absolute inset-0 z-0"></div>
+        @elseif($backgroundSetting->animated_type === 'gif' && $backgroundSetting->image_path)
+            <div class="absolute inset-0 z-0" style="background: url('{{ asset('storage/' . $backgroundSetting->image_path) }}') no-repeat center center/cover;"></div>
+        @endif
+    @endif
+    
+    <div class="absolute inset-0 z-0" 
+         style="background: {{ $backgroundSetting && $backgroundSetting->is_active ? $backgroundSetting->overlay_color ?? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.5)' }}; 
+                opacity: {{ $backgroundSetting && $backgroundSetting->is_active ? ($backgroundSetting->overlay_opacity ?? 50) / 100 : 0.5 }};"></div>
     
     <div class="hero-left relative z-10 pl-6 w-1/2"> 
       <h1 class="hero-heading text-white text-6xl font-bold mb-4">Learn to Code</h1>
@@ -211,5 +243,90 @@
     });
   }
   </script>
+
+@push('styles')
+<style>
+    /* Animated Gradient Background */
+    .animated-gradient {
+        background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe, #00f2fe);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* Animated Particles Background */
+    .animated-particles {
+        background: #1a1a2e;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .animated-particles::before,
+    .animated-particles::after {
+        content: '';
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .animated-particles::before {
+        top: 20%;
+        left: 20%;
+        animation-delay: 0s;
+    }
+
+    .animated-particles::after {
+        bottom: 20%;
+        right: 20%;
+        animation-delay: 10s;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.5;
+        }
+        25% {
+            transform: translate(50px, -50px) scale(1.2);
+            opacity: 0.8;
+        }
+        50% {
+            transform: translate(-30px, 30px) scale(0.8);
+            opacity: 0.6;
+        }
+        75% {
+            transform: translate(30px, 50px) scale(1.1);
+            opacity: 0.7;
+        }
+    }
+
+    /* Video Background Styles */
+    .hero video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+    }
+</style>
+@endpush
 
 @endsection

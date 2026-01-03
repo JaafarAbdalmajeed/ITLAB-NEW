@@ -180,7 +180,7 @@
                 </div>
             </div>
             <h1 class="certificate-title">Certificate of Completion</h1>
-            <p class="certificate-subtitle">شهادة إتمام</p>
+            <p class="certificate-subtitle">Certificate of Completion</p>
         </div>
 
         <div class="certificate-body">

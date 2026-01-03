@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use App\Events\QuizSubmitted;
 use App\Events\TrackCompleted;
+use App\Events\LessonCompleted;
 use App\Listeners\SendQuizCompletionNotification;
 use App\Listeners\SendTrackCompletionNotification;
+use App\Listeners\CheckAchievements;
+use App\Listeners\CheckQuizAchievements;
+use App\Listeners\CheckLessonAchievements;
 use App\Models\Track;
 use App\Models\Quiz;
 use App\Policies\TrackPolicy;
@@ -53,8 +57,23 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Event::listen(
+            QuizSubmitted::class,
+            CheckQuizAchievements::class
+        );
+
+        Event::listen(
             TrackCompleted::class,
             SendTrackCompletionNotification::class
+        );
+
+        Event::listen(
+            TrackCompleted::class,
+            CheckAchievements::class
+        );
+
+        Event::listen(
+            LessonCompleted::class,
+            CheckLessonAchievements::class
         );
 
         // Configure Rate Limiting

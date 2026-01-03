@@ -31,6 +31,15 @@ class SendTrackCompletionNotification
         );
 
         Log::info("Certificate created for user {$user->id}, track {$track->id}");
+
+        // Clear leaderboard cache for tracks and certificates
+        try {
+            $leaderboardService = app(\App\Services\LeaderboardService::class);
+            $leaderboardService->clearCache('tracks');
+            $leaderboardService->clearCache('certificates');
+        } catch (\Exception $e) {
+            // Ignore if LeaderboardService is not available
+        }
     }
 }
 

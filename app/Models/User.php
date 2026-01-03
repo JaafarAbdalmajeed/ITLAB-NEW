@@ -62,4 +62,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Certificate::class);
     }
+
+    public function achievements()
+    {
+        return $this->belongsToMany(Achievement::class, 'user_achievements')
+            ->withPivot('unlocked_at')
+            ->withTimestamps();
+    }
+
+    public function userAchievements()
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
+
+    public function learningDays()
+    {
+        return $this->hasMany(UserLearningDay::class);
+    }
 }

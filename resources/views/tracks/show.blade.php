@@ -3,7 +3,7 @@
 @section('content')
 @push('styles')
 <style>
-    /* حاوية المربعات الـ 12 */
+    /* Container for the 12 boxes */
     .examples-grid-container {
         display: flex;
         flex-direction: column;
@@ -11,7 +11,7 @@
         margin-bottom: 60px;
     }
 
-    /* تصميم المربع الكبير */
+    /* Large box design */
     .mega-example-card {
         background: #1a1a1a;
         border-radius: 20px;
@@ -30,7 +30,7 @@
 
     .card-header-main h3 { margin: 0; font-size: 1.5rem; font-weight: bold; }
 
-    /* تنسيق الأمثلة الثلاثة داخل المربع */
+    /* Formatting the three examples inside the box */
     .sub-examples-list {
         display: flex;
         flex-direction: column;
@@ -57,11 +57,11 @@
         width: 350px;
         padding: 20px;
         background: #1e1e1e;
-        border-right: 1px solid #222;
+        border-left: 1px solid #222;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        text-align: right;
+        text-align: left;
     }
 
     .info-part h6 { color: #fff; margin-bottom: 5px; font-weight: bold; }
@@ -88,91 +88,91 @@
 
 <main class="main-content">
     @if($track->slug == 'html')
-    <h1 class="text-center mb-5" style="color: #444;"> example of HTML on the ITLAB platform</h1>
+    <h1 class="text-center mb-5" style="color: #444;">HTML Examples on the ITLAB Platform</h1>
 
-    <div class="examples-grid-container" dir="rtl">
+    <div class="examples-grid-container">
         @php
             $colors = ['#00ffaa', '#0f404eff', '#ff5252', '#ffeb3b', '#e040fb', '#ff9100', '#4db6ac', '#81c784', '#d4e157', '#ffd54f', '#ff8a65', '#a1887f'];
             
             $allCards = [
-                ['t' => '1. أساسيات الهيكل والصفحة', 'exs' => [
-                    ['n' => 'تعريف الصفحة', 'd' => 'يخبر المتصفح أن هذا ملف HTML5.', 'c' => '<!DOCTYPE html>'],
-                    ['n' => 'وسم الجذر', 'd' => 'الحاوية الأساسية لكل كود الصفحة.', 'c' => '<html> ... </html>'],
-                    ['n' => 'رأس الصفحة', 'd' => 'يحتوي على العنوان والبيانات الوصفية.', 'c' => '<head> ... </head>']
+                ['t' => '1. Page Structure Basics', 'exs' => [
+                    ['n' => 'Page Declaration', 'd' => 'Tells the browser this is an HTML5 file.', 'c' => '<!DOCTYPE html>'],
+                    ['n' => 'Root Tag', 'd' => 'The main container for all page code.', 'c' => '<html> ... </html>'],
+                    ['n' => 'Page Header', 'd' => 'Contains the title and metadata.', 'c' => '<head> ... </head>']
                 ]],
-                ['t' => '2. العناوين والنصوص الرئيسية', 'exs' => [
-                    ['n' => 'العنوان الأكبر', 'd' => 'يستخدم لعنوان الموضوع الرئيسي.', 'c' => '<h1>عنوان رئيسي</h1>'],
-                    ['n' => 'العنوان المتوسط', 'd' => 'يستخدم لعناوين الأقسام.', 'c' => '<h3>عنوان قسم</h3>'],
-                    ['n' => 'العنوان الأصغر', 'd' => 'يستخدم للعناوين الجانبية.', 'c' => '<h6>عنوان جانبي</h6>']
+                ['t' => '2. Headings and Main Text', 'exs' => [
+                    ['n' => 'Largest Heading', 'd' => 'Used for the main topic title.', 'c' => '<h1>Main Heading</h1>'],
+                    ['n' => 'Medium Heading', 'd' => 'Used for section titles.', 'c' => '<h3>Section Title</h3>'],
+                    ['n' => 'Smallest Heading', 'd' => 'Used for side headings.', 'c' => '<h6>Side Heading</h6>']
                 ]],
-                ['t' => '3. الفقرات وتنسيق المحتوى', 'exs' => [
-                    ['n' => 'الفقرة النصية', 'd' => 'لكتابة النصوص والقطع الكتابية.', 'c' => '<p>هذا نص فقرة</p>'],
-                    ['n' => 'نص عريض', 'd' => 'لإبراز الكلمات الهامة جداً.', 'c' => '<strong>نص مهم</strong>'],
-                    ['n' => 'تمييز نص', 'd' => 'لتلوين خلفية نص محدد.', 'c' => '<mark>نص محدد</mark>']
+                ['t' => '3. Paragraphs and Content Formatting', 'exs' => [
+                    ['n' => 'Text Paragraph', 'd' => 'For writing text and paragraphs.', 'c' => '<p>This is a paragraph</p>'],
+                    ['n' => 'Bold Text', 'd' => 'To emphasize very important words.', 'c' => '<strong>Important Text</strong>'],
+                    ['n' => 'Highlighted Text', 'd' => 'To highlight a specific text background.', 'c' => '<mark>Highlighted Text</mark>']
                 ]],
-                ['t' => '4. الروابط التفاعلية', 'exs' => [
-                    ['n' => 'رابط خارجي', 'd' => 'ينقل المستخدم لموقع آخر.', 'c' => '<a href="https://google.com">جوجل</a>'],
-                    ['n' => 'فتح في نافذة جديدة', 'd' => 'لإبقاء موقعك مفتوحاً.', 'c' => '<a href="#" target="_blank">رابط</a>'],
-                    ['n' => 'رابط بريد', 'd' => 'للمراسلة الفورية.', 'c' => '<a href="mailto:a@it.com">بريدنا</a>']
+                ['t' => '4. Interactive Links', 'exs' => [
+                    ['n' => 'External Link', 'd' => 'Takes the user to another site.', 'c' => '<a href="https://google.com">Google</a>'],
+                    ['n' => 'Open in New Window', 'd' => 'To keep your site open.', 'c' => '<a href="#" target="_blank">Link</a>'],
+                    ['n' => 'Email Link', 'd' => 'For instant messaging.', 'c' => '<a href="mailto:a@it.com">Our Email</a>']
                 ]],
-                ['t' => '5. الصور والرسومات', 'exs' => [
-                    ['n' => 'إدراج صورة', 'd' => 'عرض صورة من مسار محدد.', 'c' => '<img src="pic.jpg" alt="Logo">'],
-                    ['n' => 'صورة قابلة للضغط', 'd' => 'استخدام الصورة كرابط.', 'c' => '<a href="#"><img src="btn.png"></a>'],
-                    ['n' => 'أبعاد الصورة', 'd' => 'تحديد الطول والعرض يدوياً.', 'c' => '<img src="i.jpg" width="100" height="100">']
+                ['t' => '5. Images and Graphics', 'exs' => [
+                    ['n' => 'Insert Image', 'd' => 'Display an image from a specific path.', 'c' => '<img src="pic.jpg" alt="Logo">'],
+                    ['n' => 'Clickable Image', 'd' => 'Use the image as a link.', 'c' => '<a href="#"><img src="btn.png"></a>'],
+                    ['n' => 'Image Dimensions', 'd' => 'Set width and height manually.', 'c' => '<img src="i.jpg" width="100" height="100">']
                 ]],
-                ['t' => '6. القوائم المنظمة', 'exs' => [
-                    ['n' => 'قائمة منقطة', 'd' => 'عرض عناصر بدون ترتيب.', 'c' => '<ul><li>عنصر</li></ul>'],
-                    ['n' => 'قائمة مرقمة', 'd' => 'عرض عناصر مرقمة تلقائياً.', 'c' => '<ol><li>الأول</li></ol>'],
-                    ['n' => 'قائمة متداخلة', 'd' => 'قائمة داخل قائمة أخرى.', 'c' => '<ul><li>1<ul><li>2</li></ul></li></ul>']
+                ['t' => '6. Organized Lists', 'exs' => [
+                    ['n' => 'Bulleted List', 'd' => 'Display items without order.', 'c' => '<ul><li>Item</li></ul>'],
+                    ['n' => 'Numbered List', 'd' => 'Display automatically numbered items.', 'c' => '<ol><li>First</li></ol>'],
+                    ['n' => 'Nested List', 'd' => 'A list inside another list.', 'c' => '<ul><li>1<ul><li>2</li></ul></li></ul>']
                 ]],
-                ['t' => '7. الجداول والبيانات', 'exs' => [
-                    ['n' => 'جدول بسيط', 'd' => 'عرض بيانات في صفوف.', 'c' => '<table><tr><td>داتا</td></tr></table>'],
-                    ['n' => 'عنوان الجدول', 'd' => 'وضع وصف أعلى الجدول.', 'c' => '<caption>جدول المبيعات</caption>'],
-                    ['n' => 'رأس العمود', 'd' => 'تمييز العناوين داخل الجدول.', 'c' => '<th>الاسم</th>']
+                ['t' => '7. Tables and Data', 'exs' => [
+                    ['n' => 'Simple Table', 'd' => 'Display data in rows.', 'c' => '<table><tr><td>Data</td></tr></table>'],
+                    ['n' => 'Table Caption', 'd' => 'Place a description above the table.', 'c' => '<caption>Sales Table</caption>'],
+                    ['n' => 'Column Header', 'd' => 'Mark headings inside the table.', 'c' => '<th>Name</th>']
                 ]],
-                ['t' => '8. حقول الإدخال الأساسية', 'exs' => [
-                    ['n' => 'حقل نصي', 'd' => 'لإدخال الاسم أو النصوص.', 'c' => '<input type="text" placeholder="الاسم">'],
-                    ['n' => 'حقل كلمة السر', 'd' => 'يخفي الحروف عند الكتابة.', 'c' => '<input type="password">'],
-                    ['n' => 'حقل البريد', 'd' => 'يتحقق من صيغة الإيميل.', 'c' => '<input type="email">']
+                ['t' => '8. Basic Input Fields', 'exs' => [
+                    ['n' => 'Text Field', 'd' => 'For entering name or text.', 'c' => '<input type="text" placeholder="Name">'],
+                    ['n' => 'Password Field', 'd' => 'Hides characters when typing.', 'c' => '<input type="password">'],
+                    ['n' => 'Email Field', 'd' => 'Validates email format.', 'c' => '<input type="email">']
                 ]],
-                ['t' => '9. أدوات الاختيار', 'exs' => [
-                    ['n' => 'مربع اختيار', 'd' => 'لاختيار عدة خيارات.', 'c' => '<input type="checkbox">'],
-                    ['n' => 'زر الراديو', 'd' => 'لاختيار خيار واحد فقط.', 'c' => '<input type="radio" name="g">'],
-                    ['n' => 'قائمة منسدلة', 'd' => 'لاختيار من مجموعة خيارات.', 'c' => '<select><option>خيار</option></select>']
+                ['t' => '9. Selection Tools', 'exs' => [
+                    ['n' => 'Checkbox', 'd' => 'To select multiple options.', 'c' => '<input type="checkbox">'],
+                    ['n' => 'Radio Button', 'd' => 'To select only one option.', 'c' => '<input type="radio" name="g">'],
+                    ['n' => 'Dropdown List', 'd' => 'To select from a group of options.', 'c' => '<select><option>Option</option></select>']
                 ]],
-                ['t' => '10. الأزرار والتفاعل', 'exs' => [
-                    ['n' => 'زر إرسال', 'd' => 'لإرسال بيانات النموذج.', 'c' => '<button type="submit">إرسال</button>'],
-                    ['n' => 'زر إعادة تعيين', 'd' => 'لمسح كل الحقول.', 'c' => '<input type="reset" value="مسح">'],
-                    ['n' => 'زر مخصص', 'd' => 'لتنفيذ أكواد JavaScript.', 'c' => '<button type="button">اضغط</button>']
+                ['t' => '10. Buttons and Interaction', 'exs' => [
+                    ['n' => 'Submit Button', 'd' => 'To send form data.', 'c' => '<button type="submit">Submit</button>'],
+                    ['n' => 'Reset Button', 'd' => 'To clear all fields.', 'c' => '<input type="reset" value="Clear">'],
+                    ['n' => 'Custom Button', 'd' => 'To execute JavaScript code.', 'c' => '<button type="button">Click</button>']
                 ]],
-                ['t' => '11. حاويات التقسيم (CSS Preparation)', 'exs' => [
-                    ['n' => 'الحاوية الكبرى', 'd' => 'لتقسيم الصفحة لمربعات.', 'c' => '<div class="box">محتوى</div>'],
-                    ['n' => 'حاوية نصية', 'd' => 'لتنسيق جزء من النص.', 'c' => '<span>نص ملون</span>'],
-                    ['n' => 'شريط التنقل', 'd' => 'يحتوي على روابط القائمة.', 'c' => '<nav> روابط </nav>']
+                ['t' => '11. Division Containers (CSS Preparation)', 'exs' => [
+                    ['n' => 'Main Container', 'd' => 'To divide the page into boxes.', 'c' => '<div class="box">Content</div>'],
+                    ['n' => 'Text Container', 'd' => 'To format part of the text.', 'c' => '<span>Colored Text</span>'],
+                    ['n' => 'Navigation Bar', 'd' => 'Contains menu links.', 'c' => '<nav> Links </nav>']
                 ]],
-                ['t' => '12. الوسائط المتقدمة', 'exs' => [
-                    ['n' => 'مشغل الفيديو', 'd' => 'تشغيل فيديوهات MP4.', 'c' => '<video controls src="v.mp4"></video>'],
-                    ['n' => 'مشغل الصوت', 'd' => 'تشغيل ملفات MP3.', 'c' => '<audio controls src="a.mp3"></audio>'],
-                    ['n' => 'تضمين خارجي', 'd' => 'عرض صفحة أخرى داخل صفحتك.', 'c' => '<iframe src="page.html"></iframe>']
+                ['t' => '12. Advanced Media', 'exs' => [
+                    ['n' => 'Video Player', 'd' => 'Play MP4 videos.', 'c' => '<video controls src="v.mp4"></video>'],
+                    ['n' => 'Audio Player', 'd' => 'Play MP3 files.', 'c' => '<audio controls src="a.mp3"></audio>'],
+                    ['n' => 'External Embed', 'd' => 'Display another page inside your page.', 'c' => '<iframe src="page.html"></iframe>']
                 ]]
             ];
         @endphp
 
         @foreach($allCards as $index => $card)
-        <div class="mega-example-card shadow-lg" style="border-right: 15px solid {{ $colors[$index] }};">
+                <div class="mega-example-card shadow-lg" style="border-left: 15px solid {{ $colors[$index] }};">
             <div class="card-header-main">
                 <h3 style="color: {{ $colors[$index] }};">{{ $card['t'] }}</h3>
-                <span style="color: #666; font-size: 12px;">مربع تعليمي #{{ $index + 1 }}</span>
+                <span style="color: #666; font-size: 12px;">Educational Box #{{ $index + 1 }}</span>
             </div>
             <div class="sub-examples-list">
                 @foreach($card['exs'] as $ex)
                 <div class="single-example-row">
-                    {{-- الكود --}}
+                    {{-- Code --}}
                     <div class="code-part">
-                        <button class="copy-row-btn" onclick="copySnippet(this)">نسخ</button>
+                        <button class="copy-row-btn" onclick="copySnippet(this)">Copy</button>
                         <code>{{ $ex['c'] }}</code>
                     </div>
-                    {{-- الشرح --}}
+                    {{-- Description --}}
                     <div class="info-part">
                         <h6>{{ $ex['n'] }}</h6>
                         <p>{{ $ex['d'] }}</p>
@@ -194,7 +194,7 @@
         const code = btn.nextElementSibling.innerText;
         navigator.clipboard.writeText(code);
         btn.innerText = '✅';
-        setTimeout(() => btn.innerText = 'نسخ', 1500);
+        setTimeout(() => btn.innerText = 'Copy', 1500);
     }
 </script>
 @endpush

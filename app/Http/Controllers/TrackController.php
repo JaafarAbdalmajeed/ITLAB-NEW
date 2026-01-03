@@ -7,9 +7,35 @@ use Illuminate\Http\Request;
 
 class TrackController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tracks = Track::orderBy('title')->get();
+        $query = Track::query();
+
+        // Filter by minimum rating
+        if ($request->has('min_rating')) {
+            $minRating = (float) $request->min_rating;
+            if ($minRating > 0) {
+                $query->withAvg('ratings', 'rating')
+                    ->havingRaw('COALESCE(ratings_avg_rating, 0) >= ?', [$minRating]);
+            }
+        }
+
+        // Sort by rating
+        if ($request->has('sort') && $request->sort === 'rating') {
+            $direction = $request->get('direction', 'desc');
+            $query->orderByRating($direction);
+        } else {
+            $query->orderBy('title');
+        }
+
+        // Filter by minimum ratings count
+        if ($request->has('min_ratings_count')) {
+            $minCount = (int) $request->min_ratings_count;
+            $query->withMinRatingsCount($minCount);
+        }
+
+        $tracks = $query->withCount('ratings')->withAvg('ratings', 'rating')->get();
+
         return view('tracks.index', compact('tracks'));
     }
 
@@ -32,8 +58,10 @@ class TrackController extends Controller
     }
     public function show($slug)
 {
-    // جلب التراك مع الفيديوهات التابعة له باستخدام العلاقة التي عرفناها
-    $track = Track::with('videos')->where('slug', $slug)->firstOrFail();
+    // Get track with its videos and lessons using the relationships we defined
+    $track = Track::with(['videos', 'lessons' => function($query) {
+        $query->orderBy('order');
+    }])->where('slug', $slug)->firstOrFail();
 
     return view('tracks.show', compact('track'));
 }    
