@@ -177,4 +177,13 @@ class Track extends Model
             ->where('user_id', $userId)
             ->first();
     }
+
+    /**
+     * Get videos relationship (if Video model exists)
+     */
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
 }
+  

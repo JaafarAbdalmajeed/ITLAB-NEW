@@ -9,11 +9,15 @@ class QuizFactory extends Factory
 {
     protected $model = Quiz::class;
 
-    public function definition()
-    {
-        return [
-            'track_id' => null, // set when creating
-            'title' => $this->faker->sentence(3),
-        ];
-    }
+   public function definition()
+{
+    return [
+        'track_id' => null, // سيتم تحديده عند الإنشاء في Seeder
+        'question' => $this->faker->sentence(3),
+        'option_a' => $this->faker->word(),
+        'option_b' => $this->faker->word(),
+        'option_c' => $this->faker->word(),
+        'correct_answer' => $this->faker->word(),
+    ];
+}
 }

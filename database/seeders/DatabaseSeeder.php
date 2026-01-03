@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +27,14 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Create or get student user
+        User::firstOrCreate(
+            ['email' => 'student@com'],
+            [
+                'name' => 'Student User',
+                'password' => Hash::make('student.com308'),
+            ]
+        );
         // Seed example tracks, lessons, quizzes, questions and labs
         $this->call([
             TrackSeeder::class,
