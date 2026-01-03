@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'ITLAB – Learn to Code')
@@ -5,52 +6,58 @@
 
 @section('content')
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-left">
-      <h1 class="hero-heading">Learn to Code</h1>
-      <p class="hero-subtitle">
+<section class="hero relative flex items-center justify-between w-full h-[80vh] min-h-[500px] overflow-hidden" 
+         style="background: url('{{ asset('images/itlab-bg.jpg') }}') no-repeat center center/cover !important;">
+    
+    <div class="absolute inset-0 bg-black/50 z-0"></div>
+    
+    <div class="hero-left relative z-10 pl-6 w-1/2"> 
+      <h1 class="hero-heading text-white text-6xl font-bold mb-4">Learn to Code</h1>
+      <p class="hero-subtitle text-white/90 text-xl mb-8">
         With ITLAB The World's Largest Web Developer Site.
       </p>
 
-      <div class="search-container">
-        <form id="searchForm" class="search-bar">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search our tutorials, e.g. HTML">
-          <button type="submit" class="search-btn">
-            🔍
-          </button>
+      <div class="search-container mb-6 max-w-md"> <form id="searchForm" class="search-bar flex">
+          <input type="text" id="searchInput" class="p-4 w-full rounded-l-full text-black outline-none" placeholder="Search our tutorials, e.g. HTML">
+          <button type="submit" class="search-btn bg-[#059669] hover:bg-[#10b981] px-8 rounded-r-full text-white transition">🔍</button>
         </form>
-        <p id="searchMessage" class="search-message" style="color:#ccc; margin-top:8px; font-size:14px;"></p>
       </div>
 
-      <a href="{{ route('pages.getting-started') }}" id="begin-btn">Not Sure Where To Begin?</a>
-
+      <a href="{{ route('pages.getting-started') }}" id="begin-btn" class="text-white hover:text-teal-400 underline font-medium text-lg ml-2">
+        Not Sure Where To Begin?
+      </a>
     </div>
 
-    <div class="hero-right">
-      <div class="example-card">
-        <div class="example-title">ITLAB Statistics:</div>
-        <div class="example-inner">
-<pre><code>📊 Platform Stats:
-  • {{ $stats['total_tracks'] }} Tracks
-  • {{ $stats['total_lessons'] }} Lessons
-  • {{ $stats['total_labs'] }} Labs
-  • {{ $stats['total_quizzes'] }} Quizzes
-
-🚀 Start Learning:
-  → HTML Basics
-  → CSS Styling
-  → JavaScript Logic</code></pre>
+    <div class="hero-right relative z-10 pr-10 w-auto">
+      <div class="example-card bg-[#f3f3f3] p-8 rounded-xl shadow-2xl w-[400px]">
+        <div class="example-title text-black text-2xl font-bold mb-6">ITLAB Statistics:</div>
+        <div class="example-inner text-gray-800 text-lg leading-relaxed mb-6">
+            <div class="mb-4">
+                <span class="mr-2">📊</span> <strong>Platform Stats:</strong>
+                <ul class="ml-8 list-disc">
+                    <li>{{ $stats['total_tracks'] }} Tracks</li>
+                    <li>{{ $stats['total_lessons'] }} Lessons</li>
+                    <li>{{ $stats['total_labs'] }} Labs</li>
+                    <li>{{ $stats['total_quizzes'] }} Quizzes</li>
+                </ul>
+            </div>
+            <div>
+                <span class="mr-2">🚀</span> <strong>Start Learning:</strong>
+                <ul class="ml-8">
+                    <li>→ HTML Basics</li>
+                    <li>→ CSS Styling</li>
+                    <li>→ JavaScript Logic</li>
+                </ul>
+            </div>
         </div>
         <div class="example-footer">
-          <button onclick="location.href='{{ route('pages.html') }}'">Start with HTML</button>
+          <button onclick="location.href='{{ route('pages.html') }}'" class="w-full bg-[#059669] hover:bg-[#10b981] text-white font-bold py-4 rounded-lg text-xl transition shadow-lg">
+            Try it Yourself
+          </button>
         </div>
       </div>
     </div>
-  </section>
-
+</section>
   <!-- TRACKS SECTION -->
   <section class="tracks-section">
     <!-- General Title -->

@@ -30,14 +30,14 @@ class TrackController extends Controller
 
         return redirect()->route('tracks.show', $track);
     }
+    public function show($slug)
+{
+    // جلب التراك مع الفيديوهات التابعة له باستخدام العلاقة التي عرفناها
+    $track = Track::with('videos')->where('slug', $slug)->firstOrFail();
 
-    public function show(Track $track)
-    {
-        $track->load(['lessons' => function($query) {
-            $query->orderBy('order');
-        }, 'quizzes', 'labs']);
-        return view('tracks.show', compact('track'));
-    }
+    return view('tracks.show', compact('track'));
+}    
+
 
     public function edit(Track $track)
     {

@@ -1,103 +1,201 @@
 @extends('layouts.app')
 
-@section('title', $track->title . ' — ITLAB')
-@section('body-class', 'page-' . $track->slug)
-
 @section('content')
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+<style>
+    /* حاوية المربعات الـ 12 */
+    .examples-grid-container {
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+        margin-bottom: 60px;
+    }
+
+    /* تصميم المربع الكبير */
+    .mega-example-card {
+        background: #1a1a1a;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #333;
+        width: 100%;
+    }
+
+    .card-header-main {
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .card-header-main h3 { margin: 0; font-size: 1.5rem; font-weight: bold; }
+
+    /* تنسيق الأمثلة الثلاثة داخل المربع */
+    .sub-examples-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .single-example-row {
+        display: flex;
+        border-top: 1px solid #222;
+        min-height: 100px;
+    }
+
+    .code-part {
+        flex: 1;
+        background: #000;
+        padding: 20px;
+        direction: ltr;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .info-part {
+        width: 350px;
+        padding: 20px;
+        background: #1e1e1e;
+        border-right: 1px solid #222;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: right;
+    }
+
+    .info-part h6 { color: #fff; margin-bottom: 5px; font-weight: bold; }
+    .info-part p { color: #888; margin: 0; font-size: 0.9rem; }
+
+    code { font-family: 'Consolas', monospace; color: #00ffaa; font-size: 1rem; }
+    
+    .copy-row-btn {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: #333;
+        color: #ddd;
+        border: none;
+        padding: 3px 10px;
+        border-radius: 5px;
+        font-size: 10px;
+        cursor: pointer;
+    }
+
+    .copy-row-btn:hover { background: #444; color: #fff; }
+</style>
 @endpush
 
-<div class="page-wrapper">
-    <!-- Sidebar -->
-    <x-sidebar 
-      :currentTrack="$track" 
-      currentPage="track"
-    />
+<main class="main-content">
+    @if($track->slug == 'html')
+    <h1 class="text-center mb-5" style="color: #444;"> example of HTML on the ITLAB platform</h1>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="content-header">
-            <h1>{{ $track->title }}</h1>
-            <a href="{{ route('home') }}" class="back-link">
-                <i class="fa-solid fa-arrow-left-long"></i>
-                Back to Home
-            </a>
-        </div>
+    <div class="examples-grid-container" dir="rtl">
+        @php
+            $colors = ['#00ffaa', '#0f404eff', '#ff5252', '#ffeb3b', '#e040fb', '#ff9100', '#4db6ac', '#81c784', '#d4e157', '#ffd54f', '#ff8a65', '#a1887f'];
+            
+            $allCards = [
+                ['t' => '1. أساسيات الهيكل والصفحة', 'exs' => [
+                    ['n' => 'تعريف الصفحة', 'd' => 'يخبر المتصفح أن هذا ملف HTML5.', 'c' => '<!DOCTYPE html>'],
+                    ['n' => 'وسم الجذر', 'd' => 'الحاوية الأساسية لكل كود الصفحة.', 'c' => '<html> ... </html>'],
+                    ['n' => 'رأس الصفحة', 'd' => 'يحتوي على العنوان والبيانات الوصفية.', 'c' => '<head> ... </head>']
+                ]],
+                ['t' => '2. العناوين والنصوص الرئيسية', 'exs' => [
+                    ['n' => 'العنوان الأكبر', 'd' => 'يستخدم لعنوان الموضوع الرئيسي.', 'c' => '<h1>عنوان رئيسي</h1>'],
+                    ['n' => 'العنوان المتوسط', 'd' => 'يستخدم لعناوين الأقسام.', 'c' => '<h3>عنوان قسم</h3>'],
+                    ['n' => 'العنوان الأصغر', 'd' => 'يستخدم للعناوين الجانبية.', 'c' => '<h6>عنوان جانبي</h6>']
+                ]],
+                ['t' => '3. الفقرات وتنسيق المحتوى', 'exs' => [
+                    ['n' => 'الفقرة النصية', 'd' => 'لكتابة النصوص والقطع الكتابية.', 'c' => '<p>هذا نص فقرة</p>'],
+                    ['n' => 'نص عريض', 'd' => 'لإبراز الكلمات الهامة جداً.', 'c' => '<strong>نص مهم</strong>'],
+                    ['n' => 'تمييز نص', 'd' => 'لتلوين خلفية نص محدد.', 'c' => '<mark>نص محدد</mark>']
+                ]],
+                ['t' => '4. الروابط التفاعلية', 'exs' => [
+                    ['n' => 'رابط خارجي', 'd' => 'ينقل المستخدم لموقع آخر.', 'c' => '<a href="https://google.com">جوجل</a>'],
+                    ['n' => 'فتح في نافذة جديدة', 'd' => 'لإبقاء موقعك مفتوحاً.', 'c' => '<a href="#" target="_blank">رابط</a>'],
+                    ['n' => 'رابط بريد', 'd' => 'للمراسلة الفورية.', 'c' => '<a href="mailto:a@it.com">بريدنا</a>']
+                ]],
+                ['t' => '5. الصور والرسومات', 'exs' => [
+                    ['n' => 'إدراج صورة', 'd' => 'عرض صورة من مسار محدد.', 'c' => '<img src="pic.jpg" alt="Logo">'],
+                    ['n' => 'صورة قابلة للضغط', 'd' => 'استخدام الصورة كرابط.', 'c' => '<a href="#"><img src="btn.png"></a>'],
+                    ['n' => 'أبعاد الصورة', 'd' => 'تحديد الطول والعرض يدوياً.', 'c' => '<img src="i.jpg" width="100" height="100">']
+                ]],
+                ['t' => '6. القوائم المنظمة', 'exs' => [
+                    ['n' => 'قائمة منقطة', 'd' => 'عرض عناصر بدون ترتيب.', 'c' => '<ul><li>عنصر</li></ul>'],
+                    ['n' => 'قائمة مرقمة', 'd' => 'عرض عناصر مرقمة تلقائياً.', 'c' => '<ol><li>الأول</li></ol>'],
+                    ['n' => 'قائمة متداخلة', 'd' => 'قائمة داخل قائمة أخرى.', 'c' => '<ul><li>1<ul><li>2</li></ul></li></ul>']
+                ]],
+                ['t' => '7. الجداول والبيانات', 'exs' => [
+                    ['n' => 'جدول بسيط', 'd' => 'عرض بيانات في صفوف.', 'c' => '<table><tr><td>داتا</td></tr></table>'],
+                    ['n' => 'عنوان الجدول', 'd' => 'وضع وصف أعلى الجدول.', 'c' => '<caption>جدول المبيعات</caption>'],
+                    ['n' => 'رأس العمود', 'd' => 'تمييز العناوين داخل الجدول.', 'c' => '<th>الاسم</th>']
+                ]],
+                ['t' => '8. حقول الإدخال الأساسية', 'exs' => [
+                    ['n' => 'حقل نصي', 'd' => 'لإدخال الاسم أو النصوص.', 'c' => '<input type="text" placeholder="الاسم">'],
+                    ['n' => 'حقل كلمة السر', 'd' => 'يخفي الحروف عند الكتابة.', 'c' => '<input type="password">'],
+                    ['n' => 'حقل البريد', 'd' => 'يتحقق من صيغة الإيميل.', 'c' => '<input type="email">']
+                ]],
+                ['t' => '9. أدوات الاختيار', 'exs' => [
+                    ['n' => 'مربع اختيار', 'd' => 'لاختيار عدة خيارات.', 'c' => '<input type="checkbox">'],
+                    ['n' => 'زر الراديو', 'd' => 'لاختيار خيار واحد فقط.', 'c' => '<input type="radio" name="g">'],
+                    ['n' => 'قائمة منسدلة', 'd' => 'لاختيار من مجموعة خيارات.', 'c' => '<select><option>خيار</option></select>']
+                ]],
+                ['t' => '10. الأزرار والتفاعل', 'exs' => [
+                    ['n' => 'زر إرسال', 'd' => 'لإرسال بيانات النموذج.', 'c' => '<button type="submit">إرسال</button>'],
+                    ['n' => 'زر إعادة تعيين', 'd' => 'لمسح كل الحقول.', 'c' => '<input type="reset" value="مسح">'],
+                    ['n' => 'زر مخصص', 'd' => 'لتنفيذ أكواد JavaScript.', 'c' => '<button type="button">اضغط</button>']
+                ]],
+                ['t' => '11. حاويات التقسيم (CSS Preparation)', 'exs' => [
+                    ['n' => 'الحاوية الكبرى', 'd' => 'لتقسيم الصفحة لمربعات.', 'c' => '<div class="box">محتوى</div>'],
+                    ['n' => 'حاوية نصية', 'd' => 'لتنسيق جزء من النص.', 'c' => '<span>نص ملون</span>'],
+                    ['n' => 'شريط التنقل', 'd' => 'يحتوي على روابط القائمة.', 'c' => '<nav> روابط </nav>']
+                ]],
+                ['t' => '12. الوسائط المتقدمة', 'exs' => [
+                    ['n' => 'مشغل الفيديو', 'd' => 'تشغيل فيديوهات MP4.', 'c' => '<video controls src="v.mp4"></video>'],
+                    ['n' => 'مشغل الصوت', 'd' => 'تشغيل ملفات MP3.', 'c' => '<audio controls src="a.mp3"></audio>'],
+                    ['n' => 'تضمين خارجي', 'd' => 'عرض صفحة أخرى داخل صفحتك.', 'c' => '<iframe src="page.html"></iframe>']
+                ]]
+            ];
+        @endphp
 
-        <div style="margin-bottom: 32px;">
-            <p style="font-size: 18px; color: var(--muted);">{{ $track->description }}</p>
-        </div>
-
-        @if($track->lessons->count() > 0)
-        <div style="margin-bottom: 40px;">
-            <h2 style="font-size: 28px; margin-bottom: 20px; color: var(--text);">Lessons</h2>
-            <div style="display: grid; gap: 12px;">
-                @foreach($track->lessons as $lesson)
-                    <a href="{{ route('tracks.lessons.show', [$track, $lesson]) }}" 
-                       style="display: block; padding: 16px; background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 8px; text-decoration: none; color: var(--text); transition: all 0.2s;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="background: var(--accent, #04aa6d); color: #000; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 14px;">{{ $lesson->order }}</span>
-                            <span style="font-size: 16px; font-weight: 500;">{{ $lesson->title }}</span>
-                        </div>
-                    </a>
+        @foreach($allCards as $index => $card)
+        <div class="mega-example-card shadow-lg" style="border-right: 15px solid {{ $colors[$index] }};">
+            <div class="card-header-main">
+                <h3 style="color: {{ $colors[$index] }};">{{ $card['t'] }}</h3>
+                <span style="color: #666; font-size: 12px;">مربع تعليمي #{{ $index + 1 }}</span>
+            </div>
+            <div class="sub-examples-list">
+                @foreach($card['exs'] as $ex)
+                <div class="single-example-row">
+                    {{-- الكود --}}
+                    <div class="code-part">
+                        <button class="copy-row-btn" onclick="copySnippet(this)">نسخ</button>
+                        <code>{{ $ex['c'] }}</code>
+                    </div>
+                    {{-- الشرح --}}
+                    <div class="info-part">
+                        <h6>{{ $ex['n'] }}</h6>
+                        <p>{{ $ex['d'] }}</p>
+                    </div>
+                </div>
                 @endforeach
             </div>
         </div>
-        @endif
+        @endforeach
+    </div>
+    @endif
+</main>
 
-        @if($track->quizzes->count() > 0)
-        <div style="margin-bottom: 40px;">
-            <h2 style="font-size: 28px; margin-bottom: 20px; color: var(--text);">Quizzes</h2>
-            <div style="display: grid; gap: 12px;">
-                @foreach($track->quizzes as $quiz)
-                    <a href="{{ route('tracks.quizzes.show', [$track, $quiz]) }}" 
-                       style="display: block; padding: 16px; background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 8px; text-decoration: none; color: var(--text); transition: all 0.2s;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <i class="fa-solid fa-question-circle" style="color: var(--accent, #04aa6d); font-size: 20px;"></i>
-                            <span style="font-size: 16px; font-weight: 500;">{{ $quiz->title }}</span>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-        @endif
 
-        @if($track->labs->count() > 0)
-        <div style="margin-bottom: 40px;">
-            <h2 style="font-size: 28px; margin-bottom: 20px; color: var(--text);">Labs</h2>
-            <div style="display: grid; gap: 12px;">
-                @foreach($track->labs as $lab)
-                    <a href="{{ route('tracks.labs.show', [$track, $lab]) }}" 
-                       style="display: block; padding: 16px; background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 8px; text-decoration: none; color: var(--text); transition: all 0.2s;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <i class="fa-solid fa-flask" style="color: var(--accent, #04aa6d); font-size: 20px;"></i>
-                            <div>
-                                <span style="font-size: 16px; font-weight: 500;">{{ $lab->title }}</span>
-                                @if($lab->scenario)
-                                    <p style="font-size: 14px; color: var(--muted); margin: 4px 0 0 0;">{{ Str::limit($lab->scenario, 100) }}</p>
-                                @endif
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-        @endif
-
-        @if($track->lessons->count() === 0 && $track->quizzes->count() === 0 && $track->labs->count() === 0)
-        <div style="text-align: center; padding: 60px 20px; background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 8px;">
-            <i class="fa-solid fa-inbox" style="font-size: 48px; color: var(--muted); margin-bottom: 16px;"></i>
-            <h3 style="font-size: 20px; color: var(--text); margin-bottom: 8px;">No content yet</h3>
-            <p style="color: var(--muted);">This track doesn't have any lessons, quizzes, or labs yet.</p>
-        </div>
-        @endif
-    </main>
-</div>
 
 @push('scripts')
-<script src="{{ asset('js/script.js') }}"></script>
-<script src="{{ asset('js/sidebar.js') }}"></script>
+<script>
+    function copySnippet(btn) {
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code);
+        btn.innerText = '✅';
+        setTimeout(() => btn.innerText = 'نسخ', 1500);
+    }
+</script>
 @endpush
 @endsection

@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,10 +19,12 @@ class DatabaseSeeder extends Seeder
 
         // Create or get test user to make seeding idempotent
         User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            ['name' => 'Test User']
-        );
-
+    ['email' => 'student@com'],
+    [
+        'name'     => 'Test User',
+        'password' => Hash::make('student.com308'),
+    ]
+);
         // Seed example tracks, lessons, quizzes, questions and labs
         $this->call([
             TrackSeeder::class,

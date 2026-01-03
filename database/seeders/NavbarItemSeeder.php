@@ -94,12 +94,13 @@ class NavbarItemSeeder extends Seeder
                 'target' => '_self',
                 'css_class' => null,
             ],
+           
             [
                 'label' => 'Get Certified',
                 'url' => '/get-certified',
                 'route' => 'pages.get-certified',
                 'icon' => 'fa-solid fa-cart-shopping',
-                'order' => 8,
+                'order' => 9,
                 'is_active' => true,
                 'target' => '_self',
                 'css_class' => 'nav-certified',

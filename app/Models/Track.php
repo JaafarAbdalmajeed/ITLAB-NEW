@@ -140,4 +140,10 @@ class Track extends Model
     {
         return \App\Helpers\TrackRouteHelper::getQuizRoute($this);
     }
+        // أضف هذه الدالة بشكل منفصل لتعريف العلاقة
+    public function videos()
+{
+    return $this->hasMany(Video::class);
 }
+}
+  
