@@ -47,6 +47,37 @@
         </button>
     </form>
 
+    <!-- Social Login Section -->
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+        <div style="text-align: center; margin-bottom: 15px; color: #666; font-size: 14px;">Or sign up with</div>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            <a href="{{ route('auth.google') }}" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.3s;">
+                <i class="fab fa-google" style="color: #db4437;"></i> Google
+            </a>
+            <a href="{{ route('auth.facebook') }}" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.3s;">
+                <i class="fab fa-facebook" style="color: #1877f2;"></i> Facebook
+            </a>
+            <a href="{{ route('auth.linkedin') }}" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.3s;">
+                <i class="fab fa-linkedin" style="color: #0077b5;"></i> LinkedIn
+            </a>
+            <a href="{{ route('auth.twitter') }}" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.3s;">
+                <i class="fab fa-twitter" style="color: #1da1f2;"></i> Twitter
+            </a>
+        </div>
+        <div style="margin-top: 10px;">
+            <a href="{{ route('auth.instagram') }}" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.3s;">
+                <i class="fab fa-instagram" style="color: #e4405f;"></i> Instagram
+            </a>
+        </div>
+    </div>
+
+    @if(session('error'))
+        <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-top: 15px; font-size: 14px;">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div style="text-align: center; margin-top: 20px;">
         <a href="{{ route('auth.login') }}" style="color: #666; text-decoration: none;">Already have an account? Login</a>
     </div>

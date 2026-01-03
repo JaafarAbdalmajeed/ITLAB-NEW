@@ -22,6 +22,15 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        $user = User::where('email', $request->email)->first();
+
+        // Check if user is registered via social auth (no password)
+        if ($user && $user->provider && !$user->password) {
+            throw ValidationException::withMessages([
+                'email' => ['This account was created using ' . ucfirst($user->provider) . '. Please use social login instead.'],
+            ]);
+        }
+
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
 

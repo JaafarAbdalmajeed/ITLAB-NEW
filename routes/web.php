@@ -24,6 +24,7 @@ use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SocialAuthController;
 use App\Models\NavbarItem;
 
 // ============================================================================
@@ -156,11 +157,28 @@ Route::post('contact', [PagesController::class, 'contactSubmit'])->name('pages.c
 // ============================================================================
 // Authentication Routes
 // ============================================================================
+// Authentication Routes
 Route::get('login', [AuthController::class, 'showLogin'])->name('auth.login');
 Route::post('login', [AuthController::class, 'login']);
 Route::get('register', [AuthController::class, 'showRegister'])->name('auth.register');
 Route::post('register', [AuthController::class, 'register']);
 Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+// Social Authentication Routes
+Route::get('auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+Route::get('auth/facebook', [SocialAuthController::class, 'redirectToFacebook'])->name('auth.facebook');
+Route::get('auth/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback'])->name('auth.facebook.callback');
+
+Route::get('auth/linkedin', [SocialAuthController::class, 'redirectToLinkedIn'])->name('auth.linkedin');
+Route::get('auth/linkedin/callback', [SocialAuthController::class, 'handleLinkedInCallback'])->name('auth.linkedin.callback');
+
+Route::get('auth/twitter', [SocialAuthController::class, 'redirectToTwitter'])->name('auth.twitter');
+Route::get('auth/twitter/callback', [SocialAuthController::class, 'handleTwitterCallback'])->name('auth.twitter.callback');
+
+Route::get('auth/instagram', [SocialAuthController::class, 'redirectToInstagram'])->name('auth.instagram');
+Route::get('auth/instagram/callback', [SocialAuthController::class, 'handleInstagramCallback'])->name('auth.instagram.callback');
 
 // ============================================================================
 // Admin Routes (Protected)

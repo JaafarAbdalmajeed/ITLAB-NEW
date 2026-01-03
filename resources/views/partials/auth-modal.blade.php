@@ -74,14 +74,31 @@
 
         <div class="auth-or">or continue with</div>
 
-        <div class="auth-providers">
-          <button type="button" class="auth-provider-btn" data-provider="Google">
-            Continue with Google
-          </button>
-          <button type="button" class="auth-provider-btn" data-provider="LinkedIn">
-            Continue with LinkedIn
-          </button>
+        <div class="auth-providers" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px;">
+          <a href="{{ route('auth.google') }}" class="auth-provider-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #333; font-weight: 500; cursor: pointer; transition: all 0.3s;">
+            <i class="fab fa-google" style="color: #db4437;"></i> Google
+          </a>
+          <a href="{{ route('auth.facebook') }}" class="auth-provider-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #333; font-weight: 500; cursor: pointer; transition: all 0.3s;">
+            <i class="fab fa-facebook" style="color: #1877f2;"></i> Facebook
+          </a>
+          <a href="{{ route('auth.linkedin') }}" class="auth-provider-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #333; font-weight: 500; cursor: pointer; transition: all 0.3s;">
+            <i class="fab fa-linkedin" style="color: #0077b5;"></i> LinkedIn
+          </a>
+          <a href="{{ route('auth.twitter') }}" class="auth-provider-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #333; font-weight: 500; cursor: pointer; transition: all 0.3s;">
+            <i class="fab fa-twitter" style="color: #1da1f2;"></i> Twitter
+          </a>
         </div>
+        <div style="margin-bottom: 15px;">
+          <a href="{{ route('auth.instagram') }}" class="auth-provider-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #333; font-weight: 500; cursor: pointer; transition: all 0.3s; width: 100%;">
+            <i class="fab fa-instagram" style="color: #e4405f;"></i> Instagram
+          </a>
+        </div>
+
+        @if(session('error'))
+          <div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-top: 12px; font-size: 14px;">
+            {{ session('error') }}
+          </div>
+        @endif
 
         <div class="auth-footer-text">
           Already have an account?

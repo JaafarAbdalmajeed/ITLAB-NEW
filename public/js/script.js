@@ -71,10 +71,8 @@ function handleSignupSubmit(event) {
   // No need to prevent default or show demo message
 }
 
-// Demo Google / LinkedIn
-function handleProvider(provider) {
-  alert("Demo: User will be redirected to " + provider + " OAuth.");
-}
+// Social provider redirects are handled via direct links in the views
+// No need for handleProvider function anymore as we use direct route links
 
 // Bind events after page load
 window.addEventListener("DOMContentLoaded", () => {
