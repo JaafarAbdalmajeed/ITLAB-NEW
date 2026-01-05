@@ -169,6 +169,60 @@
     </div>
   </section>
 
+  @if(isset($recommendedTracks) && count($recommendedTracks) > 0)
+  <!-- Smart Recommendations Section -->
+  <section class="tracks-section" style="background: linear-gradient(135deg, rgba(34,197,94,0.1), rgba(59,130,246,0.1)); padding: 60px 20px; border-radius: 20px; margin: 40px 0;">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h2 class="tracks-title" style="font-size: 32px; margin-bottom: 12px;">
+        🎯 Recommended for You
+      </h2>
+      <p class="tracks-subtitle" style="max-width: 600px; margin: 0 auto;">
+        @auth
+          Personalized tracks based on your learning progress and interests
+        @else
+          Popular tracks to get you started on your learning journey
+        @endauth
+      </p>
+    </div>
+
+    <div class="tracks-grid">
+      @foreach($recommendedTracks as $recommendedTrack)
+      @php
+        $trackRoute = match($recommendedTrack->slug ?? '') {
+            'html' => route('pages.html'),
+            'css' => route('pages.css'),
+            'js' => route('pages.js'),
+            'java' => route('pages.java'),
+            'cyber-network' => route('pages.cyber-network'),
+            'cyber-web' => route('pages.cyber-web'),
+            default => route('tracks.show', $recommendedTrack),
+        };
+      @endphp
+      <article class="track-card" style="position: relative; border: 2px solid rgba(34,197,94,0.3);">
+        <div style="position: absolute; top: 10px; right: 10px; font-size: 20px;">✨</div>
+        <h4>{{ $recommendedTrack->title ?? 'Track' }}</h4>
+        <p>{{ $recommendedTrack->description ?? 'Learn ' . ($recommendedTrack->title ?? 'this track') }}</p>
+        <ul>
+          @if($recommendedTrack->lessons && $recommendedTrack->lessons->count() > 0)
+            @foreach($recommendedTrack->lessons->take(3) as $lesson)
+              <li>{{ $lesson->title }}</li>
+            @endforeach
+          @else
+            <li>Comprehensive Lessons</li>
+            <li>Hands-on Practice</li>
+            <li>Real Projects</li>
+          @endif
+        </ul>
+        <div style="display: flex; align-items: center; gap: 15px; font-size: 12px; color: #666; margin-top: 10px;">
+          <span><i class="fas fa-users"></i> {{ $recommendedTrack->user_progress_count ?? 0 }} learners</span>
+        </div>
+        <button onclick="location.href='{{ $trackRoute }}'">Explore {{ $recommendedTrack->title ?? 'Track' }}</button>
+      </article>
+      @endforeach
+    </div>
+  </section>
+  @endif
+
   <script>
   // Dynamic tracks from database (prepared in controller)
   const allTracks = @json($searchTracks);

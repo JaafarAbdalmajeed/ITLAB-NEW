@@ -224,6 +224,57 @@
         </div>
     </div>
 </section>
+
+@php
+    $recommendationService = app(\App\Services\RecommendationService::class);
+    $youMightAlsoLike = $recommendationService->getYouMightAlsoLike(auth()->user(), $track, 4);
+@endphp
+
+@if(count($youMightAlsoLike) > 0)
+<!-- You Might Also Like Section -->
+<section style="margin-top: 60px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.1);">
+    <div class="content-header" style="margin-bottom: 30px;">
+        <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 8px;">You Might Also Like</h2>
+        <p style="font-size: 14px; color: #9ca3af; max-width: 600px;">
+            Based on your learning progress and interests, here are some tracks you might enjoy
+        </p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        @foreach($youMightAlsoLike as $recommendedTrack)
+        @php
+            $mainRoute = match($recommendedTrack->slug ?? '') {
+                'html' => route('pages.html'),
+                'css' => route('pages.css'),
+                'js' => route('pages.js'),
+                'cyber-network' => route('pages.cyber-network'),
+                'cyber-web' => route('pages.cyber-web'),
+                default => route('tracks.show', $recommendedTrack),
+            };
+        @endphp
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; transition: all 0.3s ease; cursor: pointer;" 
+             onclick="location.href='{{ $mainRoute }}'"
+             onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='rgba(34,197,94,0.5)';"
+             onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.1)';">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span style="font-size: 20px;">✨</span>
+                <h3 style="font-size: 18px; font-weight: 600; margin: 0;">{{ $recommendedTrack->title ?? 'Track' }}</h3>
+            </div>
+            <p style="font-size: 14px; color: #9ca3af; margin-bottom: 15px; line-height: 1.5;">
+                {{ $recommendedTrack->description ?? 'Learn ' . ($recommendedTrack->title ?? 'this track') }}
+            </p>
+            <div style="display: flex; align-items: center; gap: 15px; font-size: 12px; color: #9ca3af;">
+                <span><i class="fas fa-users"></i> {{ $recommendedTrack->user_progress_count ?? 0 }} learners</span>
+                @if($recommendedTrack->lessons && $recommendedTrack->lessons->count() > 0)
+                <span><i class="fas fa-book"></i> {{ $recommendedTrack->lessons->count() }} lessons</span>
+                @endif
+            </div>
+        </div>
+        @endforeach
+    </div>
+</section>
+@endif
+
     </main>
 </div>
 

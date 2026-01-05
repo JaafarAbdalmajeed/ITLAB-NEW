@@ -17,7 +17,10 @@ class CyberController extends Controller
     public function network()
     {
         $track = $this->loadTrack('cyber-network');
-        return view('pages.tracks.main', compact('track'));
+        // Get recommendations
+        $recommendationService = app(\App\Services\RecommendationService::class);
+        $youMightAlsoLike = $recommendationService->getYouMightAlsoLike(auth()->user(), $track, 4);
+        return view('pages.tracks.main', compact('track', 'youMightAlsoLike'));
     }
 
     public function networkVideos()
@@ -48,7 +51,10 @@ class CyberController extends Controller
     public function web()
     {
         $track = $this->loadTrack('cyber-web');
-        return view('pages.tracks.main', compact('track'));
+        // Get recommendations
+        $recommendationService = app(\App\Services\RecommendationService::class);
+        $youMightAlsoLike = $recommendationService->getYouMightAlsoLike(auth()->user(), $track, 4);
+        return view('pages.tracks.main', compact('track', 'youMightAlsoLike'));
     }
 
     public function webVideos()

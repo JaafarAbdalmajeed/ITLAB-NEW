@@ -317,6 +317,59 @@
     @endif
     @endauth
 
+    @if(isset($recommendedTracks) && count($recommendedTracks) > 0)
+    <!-- Smart Recommendations Section -->
+    <section style="margin-bottom: 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 4px;">🎯 Recommended for You</h2>
+          <p style="font-size: 13px; color: #9ca3af;">Personalized tracks based on your progress and interests</p>
+        </div>
+      </div>
+      <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        @foreach($recommendedTracks as $recommendedTrack)
+        @php
+          $progress = auth()->check() && $recommendedTrack ? ($recommendedTrack->getUserProgress()?->progress_percent ?? 0) : 0;
+          $mainRoute = match($recommendedTrack->slug ?? '') {
+              'html' => route('pages.html'),
+              'css' => route('pages.css'),
+              'js' => route('pages.js'),
+              'cyber-network' => route('pages.cyber-network'),
+              'cyber-web' => route('pages.cyber-web'),
+              default => route('tracks.show', $recommendedTrack),
+          };
+        @endphp
+        <article class="dash-card">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 18px;">✨</span>
+            <h2 class="dash-card-title" style="margin: 0;">{{ $recommendedTrack->title ?? 'Track' }}</h2>
+          </div>
+          <p class="dash-card-text">{{ $recommendedTrack->description ?? 'Learn ' . ($recommendedTrack->title ?? 'this track') }}</p>
+          @if(auth()->check() && $progress > 0)
+          <div class="dash-progress">
+            <div class="dash-progress-label">
+              Progress
+              <span>{{ $progress }}%</span>
+            </div>
+            <div class="dash-progress-bar">
+              <div class="dash-progress-fill" style="width: {{ $progress }}%;"></div>
+            </div>
+          </div>
+          @endif
+          <div style="font-size: 12px; color: #9ca3af; margin-top: 8px;">
+            <i class="fas fa-users"></i> {{ $recommendedTrack->user_progress_count ?? 0 }} learners
+          </div>
+          <div class="dash-card-actions">
+            <button class="btn-main" onclick="location.href='{{ $mainRoute }}'">
+              View Track
+            </button>
+          </div>
+        </article>
+        @endforeach
+      </div>
+    </section>
+    @endif
+
     @if($popularTracks->count() > 0)
     <!-- Popular Tracks Section -->
     <section style="margin-bottom: 32px;">

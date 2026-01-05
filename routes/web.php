@@ -24,6 +24,7 @@ use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SocialAuthController;
 use App\Models\NavbarItem;
 
@@ -154,6 +155,10 @@ Route::get('report-bug', [PagesController::class, 'reportBug'])->name('pages.rep
 Route::get('contact', [PagesController::class, 'contact'])->name('pages.contact');
 Route::post('contact', [PagesController::class, 'contactSubmit'])->name('pages.contact.submit');
 
+// Search
+Route::get('search', [SearchController::class, 'index'])->name('search.index');
+Route::get('api/search', [SearchController::class, 'api'])->name('search.api');
+
 // ============================================================================
 // Authentication Routes
 // ============================================================================
@@ -255,6 +260,10 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::get('reports/tracks', [\App\Http\Controllers\Admin\ReportController::class, 'tracks'])->name('reports.tracks');
     Route::get('reports/quizzes', [\App\Http\Controllers\Admin\ReportController::class, 'quizzes'])->name('reports.quizzes');
     Route::get('reports/certificates', [\App\Http\Controllers\Admin\ReportController::class, 'certificates'])->name('reports.certificates');
+    
+    // Settings
+    Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+    Route::put('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
 });
 
 // ============================================================================

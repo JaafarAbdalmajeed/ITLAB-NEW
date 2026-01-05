@@ -30,7 +30,11 @@ class PagesController extends Controller
             ]);
         }
         
-        return view('pages.tracks.main', compact('track'));
+        // Get recommendations
+        $recommendationService = app(\App\Services\RecommendationService::class);
+        $youMightAlsoLike = $recommendationService->getYouMightAlsoLike(auth()->user(), $track, 4);
+        
+        return view('pages.tracks.main', compact('track', 'youMightAlsoLike'));
     }
 
     public function htmlTrack()
@@ -105,7 +109,11 @@ class PagesController extends Controller
                 }
             }
             
-            return view('pages.tracks.main', compact('track'));
+            // Get recommendations
+            $recommendationService = app(\App\Services\RecommendationService::class);
+            $youMightAlsoLike = $recommendationService->getYouMightAlsoLike(auth()->user(), $track, 4);
+            
+            return view('pages.tracks.main', compact('track', 'youMightAlsoLike'));
         } catch (\Exception $e) {
             \Log::error('CSS page error: ' . $e->getMessage());
             abort(500, 'Error loading CSS page: ' . $e->getMessage());
@@ -202,7 +210,11 @@ class PagesController extends Controller
                 }
             }
             
-            return view('pages.tracks.main', compact('track'));
+            // Get recommendations
+            $recommendationService = app(\App\Services\RecommendationService::class);
+            $youMightAlsoLike = $recommendationService->getYouMightAlsoLike(auth()->user(), $track, 4);
+            
+            return view('pages.tracks.main', compact('track', 'youMightAlsoLike'));
         } catch (\Exception $e) {
             \Log::error('JS page error: ' . $e->getMessage());
             abort(500, 'Error loading JavaScript page: ' . $e->getMessage());
@@ -301,7 +313,11 @@ class PagesController extends Controller
                 }
             }
             
-            return view('pages.tracks.main', compact('track'));
+            // Get recommendations
+            $recommendationService = app(\App\Services\RecommendationService::class);
+            $youMightAlsoLike = $recommendationService->getYouMightAlsoLike(auth()->user(), $track, 4);
+            
+            return view('pages.tracks.main', compact('track', 'youMightAlsoLike'));
         } catch (\Exception $e) {
             \Log::error('Java page error: ' . $e->getMessage());
             abort(500, 'Error loading Java page: ' . $e->getMessage());
@@ -418,6 +434,10 @@ class PagesController extends Controller
             ->limit(4)
             ->get();
         
+        // Smart Recommendations
+        $recommendationService = app(\App\Services\RecommendationService::class);
+        $recommendedTracks = $recommendationService->getRecommendations(auth()->user(), 6);
+        
         return view('pages.dashboard', compact(
             'featured', 
             'recentTracks', 
@@ -426,7 +446,8 @@ class PagesController extends Controller
             'totalLabs', 
             'totalQuizzes',
             'userStats',
-            'popularTracks'
+            'popularTracks',
+            'recommendedTracks'
         ));
     }
 

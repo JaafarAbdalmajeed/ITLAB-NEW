@@ -44,6 +44,10 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
+        // Smart Recommendations
+        $recommendationService = app(\App\Services\RecommendationService::class);
+        $recommendedTracks = $recommendationService->getRecommendations(auth()->user(), 6);
+
         // Prepare tracks for search (with keywords and routes)
         $searchTracks = $allTracks->map(function($track) {
             $keywords = [strtolower($track->title), strtolower($track->slug)];
@@ -94,6 +98,7 @@ class HomeController extends Controller
             'cyberTracks',
             'stats',
             'popularTracks',
+            'recommendedTracks',
             'searchTracks',
             'backgroundSetting'
         ));
