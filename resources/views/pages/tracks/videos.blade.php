@@ -27,36 +27,38 @@
 
         <div class="row g-4">
             @php
-                // Videos array - you can change the YouTube ID for each video
-                $trackVideos = [
-                    ['t' => 'Lesson 1: Introduction to ' . $track->title, 'id' => 'PLDoPjvoNmBAwXDFEGst8SUHZuVnS866No', 'c' => '#00ffaa'],
-                    ['t' => 'Lesson 2: Installation and Development Environment', 'id' => 'abc1', 'c' => '#61dafb'],
-                    ['t' => 'Lesson 3: Basic Concepts and Tools', 'id' => 'abc2', 'c' => '#ff5252'],
-                    ['t' => 'Lesson 4: First Practical Application', 'id' => 'abc3', 'c' => '#ffeb3b'],
-                    ['t' => 'Lesson 5: Advanced Tips and Problem Solving', 'id' => 'abc4', 'c' => '#e040fb'],
-                ];
+                // Get videos from database
+                $query = $track->videos();
+                // Check if 'order' column exists before using it
+                if (\Illuminate\Support\Facades\Schema::hasColumn('videos', 'order')) {
+                    $trackVideos = $query->orderBy('order')->get();
+                } else {
+                    $trackVideos = $query->latest()->get();
+                }
             @endphp
 
-            @foreach($trackVideos as $index => $video)
+            @forelse($trackVideos as $index => $video)
             <div class="col-12 mb-4">
-                <div class="video-container-card shadow-lg" style="border-left: 12px solid {{ $video['c'] }}; background: #1a1a1a; border-radius: 20px; overflow: hidden; border: 1px solid #333;">
+                <div class="video-container-card shadow-lg" style="border-left: 12px solid {{ $video->color ?? '#00ffaa' }}; background: #1a1a1a; border-radius: 20px; overflow: hidden; border: 1px solid #333;">
                     <div class="row g-0">
                         <div class="col-lg-7">
                             <div class="ratio ratio-16x9">
-                                <iframe src="https://www.youtube.com/embed/{{ $video['id'] }}" 
-                                        title="{{ $video['t'] }}" 
+                                <iframe src="{{ $video->embed_url }}" 
+                                        title="{{ $video->title }}" 
                                         frameborder="0" 
                                         allowfullscreen>
                                 </iframe>
                             </div>
                         </div>
                         <div class="col-lg-5 p-4 d-flex flex-column justify-content-center">
-                            <h3 style="color: {{ $video['c'] }}; font-weight: bold; margin-bottom: 15px;">{{ $video['t'] }}</h3>
-                            <p style="color: #bbb; line-height: 1.6;">Watch this lesson to learn how to apply the practical skills of this track step by step with the instructor.</p>
+                            <h3 style="color: {{ $video->color ?? '#00ffaa' }}; font-weight: bold; margin-bottom: 15px;">{{ $video->title }}</h3>
+                            <p style="color: #bbb; line-height: 1.6;">
+                                {{ $video->description ?? 'Watch this lesson to learn how to apply the practical skills of this track step by step with the instructor.' }}
+                            </p>
                             
                             <div class="mt-4 d-flex align-items-center gap-2">
-                                <span class="badge" style="background: {{ $video['c'] }}; color: #000; padding: 8px 15px;">Video #{{ $index + 1 }}</span>
-                                <a href="https://youtube.com/watch?v={{ $video['id'] }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                <span class="badge" style="background: {{ $video->color ?? '#00ffaa' }}; color: #000; padding: 8px 15px;">Video #{{ $index + 1 }}</span>
+                                <a href="{{ $video->watch_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
                                     <i class="fab fa-youtube text-danger me-1"></i> YouTube
                                 </a>
                             </div>
@@ -64,7 +66,13 @@
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <div class="col-12">
+                <div class="alert alert-info" style="background: #1a1a1a; color: #00ffaa; padding: 20px; border-radius: 10px; border: 1px solid #333; text-align: center;">
+                    <i class="fa-solid fa-video me-2"></i> No videos available for this track yet.
+                </div>
+            </div>
+            @endforelse
         </div>
     </main>
 </div>

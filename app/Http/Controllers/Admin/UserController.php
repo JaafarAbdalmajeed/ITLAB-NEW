@@ -13,13 +13,52 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::withCount(['quizResults', 'progress'])
-            ->latest()
-            ->paginate(20);
+        $query = User::withCount(['quizResults', 'progress']);
+        
+        // Filter by admin status if requested
+        if ($request->has('admin_only') && $request->admin_only == '1') {
+            $query->where('is_admin', true);
+        }
+        
+        // Search functionality
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+        
+        $users = $query->latest()->paginate(20)->appends($request->query());
         
         return view('admin.users.index', compact('users'));
+    }
+    
+    public function create()
+    {
+        return view('admin.users.create');
+    }
+    
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'is_admin' => 'boolean',
+        ]);
+
+        $data['password'] = Hash::make($request->password);
+        $data['is_admin'] = $request->has('is_admin');
+
+        $user = User::create($data);
+
+        $userType = $data['is_admin'] ? 'admin' : 'user';
+        
+        return redirect()->route('admin.users.index')
+            ->with('success', ucfirst($userType) . ' account created successfully.');
     }
 
     public function show(User $user)

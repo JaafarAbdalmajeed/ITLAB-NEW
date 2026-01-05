@@ -31,12 +31,86 @@
         </p>
 
         @if(session('status') || session('success'))
+            @php
+                $user = auth()->user();
+                $score = session('quiz_score');
+                $hasCertificate = false;
+                if ($user && $score && $score >= 70) {
+                    $hasCertificate = \App\Models\Certificate::where('user_id', $user->id)
+                        ->where('quiz_id', $quiz->id)
+                        ->exists();
+                }
+            @endphp
             <div style="background: #d4edda; border: 1px solid #28a745; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                 <p style="margin: 0; color: #155724;">
                     <i class="fas fa-check-circle"></i> 
                     <strong>Success!</strong> {{ session('status') }}
                     @if(session('quiz_score'))
                         <br><small>Your score: <strong>{{ session('quiz_score') }}%</strong></small>
+                    @endif
+                </p>
+                @if($user && $score >= 70 && $hasCertificate)
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(40, 167, 69, 0.3);">
+                        <p style="margin: 0 0 10px 0; color: #155724; font-weight: 600;">
+                            <i class="fas fa-certificate"></i> Congratulations! You've earned a certificate!
+                        </p>
+                        <a href="{{ route('quizzes.certificate.show', [$track, $quiz]) }}" 
+                           style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 600; margin-right: 10px;">
+                            <i class="fas fa-eye"></i> View Certificate
+                        </a>
+                        <a href="{{ route('quizzes.certificate.download', [$track, $quiz]) }}" 
+                           style="display: inline-block; background: #17a2b8; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 600;">
+                            <i class="fas fa-download"></i> Download PDF
+                        </a>
+                    </div>
+                @elseif($user && $score >= 70 && !$hasCertificate)
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(40, 167, 69, 0.3);">
+                        <p style="margin: 0; color: #155724;">
+                            <i class="fas fa-info-circle"></i> Your certificate is being generated. Please refresh the page in a moment.
+                        </p>
+                    </div>
+                @endif
+            </div>
+        @endif
+
+        @php
+            $user = auth()->user();
+            $userBestResult = null;
+            $hasCertificate = false;
+            if ($user) {
+                $userBestResult = $quiz->getUserBestResult($user->id);
+                if ($userBestResult && $userBestResult->score >= 70) {
+                    $hasCertificate = \App\Models\Certificate::where('user_id', $user->id)
+                        ->where('quiz_id', $quiz->id)
+                        ->exists();
+                }
+            }
+        @endphp
+
+        @if($user && $userBestResult && $userBestResult->score >= 70 && $hasCertificate)
+            <div style="background: #d1ecf1; border: 1px solid #17a2b8; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <p style="margin: 0 0 10px 0; color: #0c5460; font-weight: 600;">
+                    <i class="fas fa-trophy"></i> You passed this quiz with {{ $userBestResult->score }}%!
+                </p>
+                <p style="margin: 0 0 10px 0; color: #0c5460;">
+                    <i class="fas fa-certificate"></i> You have a certificate for this quiz.
+                </p>
+                <a href="{{ route('quizzes.certificate.show', [$track, $quiz]) }}" 
+                   style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 600; margin-right: 10px;">
+                    <i class="fas fa-eye"></i> View Certificate
+                </a>
+                <a href="{{ route('quizzes.certificate.download', [$track, $quiz]) }}" 
+                   style="display: inline-block; background: #17a2b8; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 600;">
+                    <i class="fas fa-download"></i> Download PDF
+                </a>
+            </div>
+        @elseif($user && $userBestResult)
+            <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <p style="margin: 0; color: #856404;">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Your best score:</strong> {{ $userBestResult->score }}%
+                    @if($userBestResult->score < 70)
+                        <br><small>Score 70% or higher to earn a certificate!</small>
                     @endif
                 </p>
             </div>

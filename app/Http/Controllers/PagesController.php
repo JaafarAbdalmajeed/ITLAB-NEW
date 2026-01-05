@@ -6,7 +6,9 @@ use App\Models\Track;
 use App\Models\Lab;
 use App\Models\Quiz;
 use App\Models\Contact;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
@@ -41,7 +43,7 @@ class PagesController extends Controller
 
     public function htmlVideos()
     {
-        $track = Track::where('slug', 'html')->firstOrFail();
+        $track = Track::where('slug', 'html')->with('videos')->firstOrFail();
         return view('pages.tracks.videos', compact('track'));
     }
 
@@ -135,7 +137,7 @@ class PagesController extends Controller
      */
     public function cssVideos()
     {
-        $track = Track::where('slug', 'css')->firstOrFail();
+        $track = Track::where('slug', 'css')->with('videos')->firstOrFail();
         return view('pages.tracks.videos', compact('track'));
     }
 
@@ -232,7 +234,7 @@ class PagesController extends Controller
      */
     public function jsVideos()
     {
-        $track = Track::where('slug', 'js')->firstOrFail();
+        $track = Track::where('slug', 'js')->with('videos')->firstOrFail();
         return view('pages.tracks.videos', compact('track'));
     }
 
@@ -331,7 +333,7 @@ class PagesController extends Controller
      */
     public function javaVideos()
     {
-        $track = Track::where('slug', 'java')->firstOrFail();
+        $track = Track::where('slug', 'java')->with('videos')->firstOrFail();
         return view('pages.tracks.videos', compact('track'));
     }
 
@@ -625,6 +627,7 @@ class PagesController extends Controller
      */
     public function trackVideos(Track $track)
     {
+        $track->load('videos');
         return view('pages.tracks.videos', compact('track'));
     }
 

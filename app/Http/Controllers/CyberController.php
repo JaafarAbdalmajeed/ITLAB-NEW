@@ -11,7 +11,7 @@ class CyberController extends Controller
     {
         return Track::where('slug', $slug)->with(['lessons' => function ($q) {
             $q->orderBy('order');
-        }, 'quizzes.questions', 'labs'])->firstOrFail();
+        }, 'quizzes.questions', 'labs', 'videos'])->firstOrFail();
     }
 
     public function network()

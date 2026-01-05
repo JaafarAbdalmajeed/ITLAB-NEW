@@ -8,7 +8,7 @@
         $reviews = collect([]);
     }
     $rateableType = $track ? 'track' : 'lesson';
-    $rateableId = $track ? $track->id : $lesson->id;
+    $rateableId = $track ? $track->slug : $lesson->id;
 @endphp
 
 <div class="reviews-component" data-type="{{ $rateableType }}" data-id="{{ $rateableId }}">
@@ -331,14 +331,38 @@ function submitReview(event, form) {
         ? `/tracks/${id}/reviews`
         : `/tracks/${id}/lessons/${id}/reviews`;
     
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    if (!csrfToken) {
+        alert('Error: CSRF token not found. Please refresh the page and try again.');
+        return;
+    }
+    
     fetch(url, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            'X-CSRF-TOKEN': csrfToken.content,
+            'Accept': 'application/json'
         },
         body: formData
     })
-    .then(response => response.json())
+    .then(async response => {
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            throw new Error(`Server error: ${response.status} ${response.statusText}`);
+        }
+        
+        if (!response.ok) {
+            // Handle validation errors
+            if (data.errors) {
+                const errorMessages = Object.values(data.errors).flat().join('\n');
+                throw new Error(errorMessages || data.message || 'Validation error');
+            }
+            throw new Error(data.message || `Server error: ${response.status}`);
+        }
+        return data;
+    })
     .then(data => {
         if (data.success) {
             location.reload();
@@ -348,7 +372,7 @@ function submitReview(event, form) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error submitting review');
+        alert(error.message || 'Error submitting review');
     });
 }
 

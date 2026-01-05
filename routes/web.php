@@ -181,6 +181,14 @@ Route::get('auth/instagram', [SocialAuthController::class, 'redirectToInstagram'
 Route::get('auth/instagram/callback', [SocialAuthController::class, 'handleInstagramCallback'])->name('auth.instagram.callback');
 
 // ============================================================================
+// Preferences Routes
+// ============================================================================
+Route::get('preferences', [\App\Http\Controllers\PreferenceController::class, 'index'])->name('preferences.index');
+Route::put('preferences', [\App\Http\Controllers\PreferenceController::class, 'update'])->name('preferences.update');
+Route::delete('preferences/reset', [\App\Http\Controllers\PreferenceController::class, 'reset'])->name('preferences.reset');
+Route::get('api/preferences', [\App\Http\Controllers\PreferenceController::class, 'get'])->name('preferences.get');
+
+// ============================================================================
 // Admin Routes (Protected)
 // ============================================================================
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -203,6 +211,9 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     // Labs Management
     Route::resource('tracks.labs', AdminLabController::class)->except(['show']);
     
+    // Videos Management
+    Route::resource('tracks.videos', \App\Http\Controllers\Admin\VideoController::class)->except(['show']);
+    
     // Pages Management
     Route::resource('pages', AdminPageController::class);
     
@@ -220,7 +231,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::post('navbar/update-order', [\App\Http\Controllers\Admin\NavbarController::class, 'updateOrder'])->name('navbar.update-order');
     
     // Users Management
-    Route::resource('users', AdminUserController::class)->except(['create', 'store']);
+    Route::resource('users', AdminUserController::class);
     Route::post('users/{user}/tracks/{track}/complete', [AdminUserController::class, 'completeTrack'])->name('admin.users.tracks.complete');
     
     // Certificates Management
@@ -237,6 +248,13 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     
     // Statistics
     Route::get('stats', [AdminStatsController::class, 'index'])->name('stats.index');
+    
+    // Reports
+    Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/users', [\App\Http\Controllers\Admin\ReportController::class, 'users'])->name('reports.users');
+    Route::get('reports/tracks', [\App\Http\Controllers\Admin\ReportController::class, 'tracks'])->name('reports.tracks');
+    Route::get('reports/quizzes', [\App\Http\Controllers\Admin\ReportController::class, 'quizzes'])->name('reports.quizzes');
+    Route::get('reports/certificates', [\App\Http\Controllers\Admin\ReportController::class, 'certificates'])->name('reports.certificates');
 });
 
 // ============================================================================
@@ -277,6 +295,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('certificates', [\App\Http\Controllers\CertificateController::class, 'index'])->name('certificates.index');
     Route::get('tracks/{track}/certificate', [\App\Http\Controllers\CertificateController::class, 'show'])->name('tracks.certificate.show');
     Route::get('tracks/{track}/certificate/download', [\App\Http\Controllers\CertificateController::class, 'download'])->name('tracks.certificate.download');
+    // Quiz certificates
+    Route::get('tracks/{track}/quizzes/{quiz}/certificate', [\App\Http\Controllers\CertificateController::class, 'showQuiz'])->name('quizzes.certificate.show');
+    Route::get('tracks/{track}/quizzes/{quiz}/certificate/download', [\App\Http\Controllers\CertificateController::class, 'downloadQuiz'])->name('quizzes.certificate.download');
 });
 
 // Achievements

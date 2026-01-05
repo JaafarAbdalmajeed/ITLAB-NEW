@@ -25,6 +25,7 @@ class User extends Authenticatable
         'provider',
         'provider_id',
         'avatar',
+        'preferences',
     ];
 
     /**
@@ -48,6 +49,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'preferences' => 'array',
         ];
     }
 
@@ -81,5 +83,42 @@ class User extends Authenticatable
     public function learningDays()
     {
         return $this->hasMany(UserLearningDay::class);
+    }
+
+    /**
+     * Get user preference value
+     */
+    public function getPreference(string $key, $default = null)
+    {
+        $preferences = $this->preferences ?? [];
+        return $preferences[$key] ?? $default;
+    }
+
+    /**
+     * Set user preference
+     */
+    public function setPreference(string $key, $value): void
+    {
+        $preferences = $this->preferences ?? [];
+        $preferences[$key] = $value;
+        $this->preferences = $preferences;
+        $this->save();
+    }
+
+    /**
+     * Get all preferences with defaults
+     */
+    public function getPreferences(): array
+    {
+        $defaults = [
+            'theme' => 'light',
+            'primary_color' => '#04aa6d',
+            'font_size' => 'medium',
+            'language' => 'en',
+            'layout' => 'default',
+        ];
+
+        $preferences = $this->preferences ?? [];
+        return array_merge($defaults, $preferences);
     }
 }

@@ -48,6 +48,9 @@
                         <a href="{{ route('admin.tracks.labs.index', $track) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
                             <i class="fas fa-flask"></i> Labs
                         </a>
+                        <a href="{{ route('admin.tracks.videos.index', $track) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
+                            <i class="fas fa-video"></i> Videos
+                        </a>
                         <a href="{{ route('admin.tracks.show', $track) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
                             <i class="fas fa-eye"></i> View
                         </a>

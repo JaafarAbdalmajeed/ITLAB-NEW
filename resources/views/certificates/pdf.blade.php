@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Certificate - {{ $track->title }}</title>
+    <title>Certificate - {{ isset($quiz) ? $quiz->title : $track->title }}</title>
     <style>
         * {
             margin: 0;
@@ -191,10 +191,23 @@
                 {{ $user->name }}
             </div>
             <p class="certificate-text">
-                has successfully completed the track
+                @if(isset($quiz))
+                    has successfully passed the quiz
+                @else
+                    has successfully completed the track
+                @endif
             </p>
             <div class="certificate-track">
-                {{ $track->title }}
+                @if(isset($quiz))
+                    {{ $quiz->title }}
+                    @if($quiz->track)
+                        <span style="display: block; font-size: 18px; color: #666; margin-top: 8px; font-weight: normal;">
+                            ({{ $quiz->track->title }} Track)
+                        </span>
+                    @endif
+                @else
+                    {{ $track->title }}
+                @endif
             </div>
             <p class="certificate-text" style="margin-top: 30px; font-size: 16px; color: #777;">
                 on {{ $certificate->issued_at->format('F d, Y') }}

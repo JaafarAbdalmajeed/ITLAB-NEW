@@ -13,6 +13,7 @@ class Certificate extends Model
     protected $fillable = [
         'user_id',
         'track_id',
+        'quiz_id',
         'certificate_number',
         'issued_at',
     ];
@@ -52,5 +53,18 @@ class Certificate extends Model
     public function track()
     {
         return $this->belongsTo(Track::class);
+    }
+
+    public function quiz()
+    {
+        return $this->belongsTo(Quiz::class);
+    }
+
+    /**
+     * Get the type of certificate (track or quiz)
+     */
+    public function getTypeAttribute(): string
+    {
+        return $this->quiz_id ? 'quiz' : 'track';
     }
 }

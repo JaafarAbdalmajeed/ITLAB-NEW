@@ -186,18 +186,39 @@
                     <div class="certificate-icon">
                         <i class="fas fa-certificate"></i>
                     </div>
-                    <div class="certificate-title">{{ $certificate->track->title }}</div>
+                    <div class="certificate-title">
+                        @if($certificate->quiz)
+                            {{ $certificate->quiz->title }}
+                            <span style="display: block; font-size: 16px; color: #666; margin-top: 5px; font-weight: normal;">
+                                Quiz Certificate
+                            </span>
+                        @else
+                            {{ $certificate->track->title }}
+                            <span style="display: block; font-size: 16px; color: #666; margin-top: 5px; font-weight: normal;">
+                                Track Certificate
+                            </span>
+                        @endif
+                    </div>
                     <div class="certificate-number">Certificate No: {{ $certificate->certificate_number }}</div>
                     <div class="certificate-date">
                         Issued on: {{ $certificate->issued_at->format('Y/m/d') }}
                     </div>
                     <div class="certificate-actions">
-                        <a href="{{ route('tracks.certificate.show', $certificate->track) }}" class="btn-view">
-                            <i class="fas fa-eye"></i> View
-                        </a>
-                        <a href="{{ route('tracks.certificate.download', $certificate->track) }}" class="btn-download" target="_blank">
-                            <i class="fas fa-download"></i> Download
-                        </a>
+                        @if($certificate->quiz)
+                            <a href="{{ route('quizzes.certificate.show', [$certificate->quiz->track ?? $certificate->track, $certificate->quiz]) }}" class="btn-view">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <a href="{{ route('quizzes.certificate.download', [$certificate->quiz->track ?? $certificate->track, $certificate->quiz]) }}" class="btn-download" target="_blank">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        @else
+                            <a href="{{ route('tracks.certificate.show', $certificate->track) }}" class="btn-view">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <a href="{{ route('tracks.certificate.download', $certificate->track) }}" class="btn-download" target="_blank">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        @endif
                     </div>
                 </div>
             @endforeach

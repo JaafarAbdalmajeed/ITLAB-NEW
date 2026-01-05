@@ -63,6 +63,11 @@
     </nav>
 
     <div class="navbar-right">
-      <button id="signInBtn" class="nav-btn" type="button">Sign In</button>
+      <a href="{{ route('preferences.index') }}" class="nav-btn" style="margin-right: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;" title="Preferences">
+        <i class="fas fa-cog"></i>
+      </a>
+      @guest
+        <button id="signInBtn" class="nav-btn" type="button">Sign In</button>
+      @endguest
     </div>
   </header>

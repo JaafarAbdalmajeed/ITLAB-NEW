@@ -49,10 +49,12 @@
         With ITLAB The World's Largest Web Developer Site.
       </p>
 
-      <div class="search-container mb-6 max-w-md"> <form id="searchForm" class="search-bar flex">
+      <div class="search-container mb-6 max-w-md">
+        <form id="searchForm" class="search-bar flex">
           <input type="text" id="searchInput" class="p-4 w-full rounded-l-full text-black outline-none" placeholder="Search our tutorials, e.g. HTML">
           <button type="submit" class="search-btn bg-[#059669] hover:bg-[#10b981] px-8 rounded-r-full text-white transition">🔍</button>
         </form>
+        <div id="searchMessage" style="margin-top: 10px; min-height: 20px;"></div>
       </div>
 
       <a href="{{ route('pages.getting-started') }}" id="begin-btn" class="text-white hover:text-teal-400 underline font-medium text-lg ml-2">
@@ -206,41 +208,70 @@
   const searchInput  = document.getElementById("searchInput");
   const searchMsg    = document.getElementById("searchMessage");
 
-  if (searchForm && searchInput && searchMsg) {
+  if (searchForm && searchInput) {
     searchForm.addEventListener("submit", function (e) {
       e.preventDefault(); // Don't reload the page
 
       const query = searchInput.value.trim().toLowerCase();
 
       if (!query) {
-        searchMsg.textContent = "Please enter a course name first (e.g., HTML, CSS, JavaScript).";
-        searchMsg.style.color = "#fbbf24";
+        if (searchMsg) {
+          searchMsg.textContent = "Please enter a course name first (e.g., HTML, CSS, JavaScript).";
+          searchMsg.style.color = "#fbbf24";
+        }
         return;
       }
 
-      // Try to find the first track that matches the user's input
-      const match = allRoutes.find(route =>
-        route.keywords.some(keyword => 
-          keyword.includes(query) || query.includes(keyword)
-        )
+      // Try to find tracks that match the user's input
+      // First, try exact matches
+      let match = allRoutes.find(route =>
+        route.keywords && route.keywords.some(keyword => {
+          const lowerKeyword = keyword.toLowerCase();
+          return lowerKeyword === query || query === lowerKeyword;
+        })
       );
+
+      // If no exact match, try partial matches
+      if (!match) {
+        match = allRoutes.find(route =>
+          route.keywords && route.keywords.some(keyword => {
+            const lowerKeyword = keyword.toLowerCase();
+            return lowerKeyword.includes(query) || query.includes(lowerKeyword);
+          })
+        );
+      }
+
+      // If still no match, try word-by-word matching
+      if (!match && query.split(' ').length > 1) {
+        const queryWords = query.split(' ').filter(w => w.length > 0);
+        match = allRoutes.find(route =>
+          route.keywords && route.keywords.some(keyword => {
+            const lowerKeyword = keyword.toLowerCase();
+            return queryWords.some(word => lowerKeyword.includes(word) || word.includes(lowerKeyword));
+          })
+        );
+      }
 
       if (match) {
         // Redirect user to the track page
         window.location.href = match.url;
       } else {
         // No match found
-        searchMsg.textContent = "No match found. Try keywords like: HTML, CSS, JavaScript, Network Security, Java, PHP...";
-        searchMsg.style.color = "#ef4444";
+        if (searchMsg) {
+          searchMsg.textContent = "No match found. Try keywords like: HTML, CSS, JavaScript, Network Security, Java, PHP...";
+          searchMsg.style.color = "#ef4444";
+        }
       }
     });
 
     // Clear message when user starts typing
-    searchInput.addEventListener("input", function() {
-      if (searchMsg.textContent) {
-        searchMsg.textContent = "";
-      }
-    });
+    if (searchInput && searchMsg) {
+      searchInput.addEventListener("input", function() {
+        if (searchMsg.textContent) {
+          searchMsg.textContent = "";
+        }
+      });
+    }
   }
   </script>
 

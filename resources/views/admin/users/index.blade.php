@@ -7,7 +7,46 @@
 <div class="admin-card">
     <div class="admin-card-header">
         <h2>All Users</h2>
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Add New User
+        </a>
     </div>
+
+    @if(session('success'))
+        <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 12px; border-radius: 4px; margin: 20px;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin: 20px;">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <!-- Filters and Search -->
+    <form method="GET" action="{{ route('admin.users.index') }}" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: end;">
+        <div style="flex: 1; min-width: 200px;">
+            <label for="search" style="display: block; margin-bottom: 5px; font-size: 13px;">Search:</label>
+            <input type="text" id="search" name="search" class="form-control" value="{{ request('search') }}" placeholder="Name or Email">
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+            <label for="admin_only" style="display: block; margin-bottom: 5px; font-size: 13px;">Filter:</label>
+            <select id="admin_only" name="admin_only" class="form-control">
+                <option value="">All Users</option>
+                <option value="1" {{ request('admin_only') == '1' ? 'selected' : '' }}>Admins Only</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">
+                <i class="fas fa-search"></i> Search
+            </button>
+            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary" style="margin-top: 20px;">
+                <i class="fas fa-times"></i> Reset
+            </a>
+        </div>
+    </form>
+
     <table class="admin-table">
         <thead>
             <tr>

@@ -75,21 +75,23 @@
         <tbody>
             @forelse($certificates as $certificate)
                 <tr>
-                    <td><strong>{{ $certificate->certificate_number }}</strong></td>
-                    <td>{{ $certificate->user->name }}</td>
-                    <td>{{ $certificate->track->title }}</td>
-                    <td>{{ $certificate->issued_at->format('Y/m/d') }}</td>
+                    <td><strong>{{ $certificate->certificate_number ?? 'N/A' }}</strong></td>
+                    <td>{{ $certificate->user->name ?? 'Deleted User' }}</td>
+                    <td>{{ $certificate->track->title ?? 'Deleted Track' }}</td>
+                    <td>{{ $certificate->issued_at ? $certificate->issued_at->format('Y/m/d') : 'N/A' }}</td>
                     <td>
-                        <a href="{{ route('admin.certificates.view', $certificate) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;" target="_blank" title="View Certificate">
-                            <i class="fas fa-certificate"></i> View Certificate
-                        </a>
-                        <a href="{{ route('admin.certificates.show', $certificate) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;" title="View Details">
+                        @if($certificate->user && $certificate->track)
+                            <a href="{{ route('admin.certificates.view', $certificate->id) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;" target="_blank" title="View Certificate">
+                                <i class="fas fa-certificate"></i> View Certificate
+                            </a>
+                        @endif
+                        <a href="{{ route('admin.certificates.show', $certificate->id) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;" title="View Details">
                             <i class="fas fa-eye"></i> Details
                         </a>
-                        <a href="{{ route('admin.certificates.edit', $certificate) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;" title="Edit Certificate">
+                        <a href="{{ route('admin.certificates.edit', $certificate->id) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;" title="Edit Certificate">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <form action="{{ route('admin.certificates.destroy', $certificate) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('admin.certificates.destroy', $certificate->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="return confirm('Are you sure you want to delete this certificate?')" title="Delete Certificate">

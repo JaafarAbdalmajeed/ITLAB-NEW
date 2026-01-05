@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Certificate - ' . $track->title . ' — ITLAB')
+@section('title', 'Certificate - ' . (isset($quiz) ? $quiz->title : $track->title) . ' — ITLAB')
 @section('body-class', 'page-certificate-show')
 
 @section('content')
@@ -307,10 +307,23 @@
                 {{ $user->name }}
             </div>
             <p class="certificate-text">
-                has successfully completed the track
+                @if(isset($quiz))
+                    has successfully passed the quiz
+                @else
+                    has successfully completed the track
+                @endif
             </p>
             <div class="certificate-track">
-                {{ $track->title }}
+                @if(isset($quiz))
+                    {{ $quiz->title }}
+                    @if($quiz->track)
+                        <span style="display: block; font-size: 20px; color: #666; margin-top: 10px;">
+                            ({{ $quiz->track->title }} Track)
+                        </span>
+                    @endif
+                @else
+                    {{ $track->title }}
+                @endif
             </div>
             <p class="certificate-text" style="margin-top: 35px; font-size: 18px; color: #777;">
                 on {{ $certificate->issued_at->format('F d, Y') }}
@@ -328,9 +341,15 @@
     </div>
 
     <div class="certificate-actions">
-        <a href="{{ route('tracks.certificate.download', $track) }}" class="btn-action btn-download" target="_blank">
-            <i class="fas fa-download"></i> Download PDF
-        </a>
+        @if(isset($quiz))
+            <a href="{{ route('quizzes.certificate.download', [$track, $quiz]) }}" class="btn-action btn-download" target="_blank">
+                <i class="fas fa-download"></i> Download PDF
+            </a>
+        @else
+            <a href="{{ route('tracks.certificate.download', $track) }}" class="btn-action btn-download" target="_blank">
+                <i class="fas fa-download"></i> Download PDF
+            </a>
+        @endif
         <a href="{{ route('certificates.index') }}" class="btn-action btn-back">
             <i class="fas fa-arrow-left"></i> Back to Certificates
         </a>

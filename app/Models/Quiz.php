@@ -29,6 +29,11 @@ class Quiz extends Model
         return $this->hasMany(QuizResult::class);
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
     public function calculateScore(array $answers): int
     {
         $questions = $this->questions()->get();

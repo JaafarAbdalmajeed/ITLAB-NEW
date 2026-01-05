@@ -13,28 +13,34 @@ class CertificateController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Certificate::with(['user', 'track']);
+        try {
+            $query = Certificate::with(['user', 'track']);
 
-        // Filter by track
-        if ($request->has('track_id') && $request->track_id) {
-            $query->where('track_id', $request->track_id);
+            // Filter by track
+            if ($request->has('track_id') && $request->track_id) {
+                $query->where('track_id', $request->track_id);
+            }
+
+            // Filter by user
+            if ($request->has('user_id') && $request->user_id) {
+                $query->where('user_id', $request->user_id);
+            }
+
+            // Search by certificate number
+            if ($request->has('search') && $request->search) {
+                $query->where('certificate_number', 'like', '%' . $request->search . '%');
+            }
+
+            $certificates = $query->latest('issued_at')->paginate(20)->appends($request->query());
+            $tracks = Track::all();
+            $users = User::all();
+
+            return view('admin.certificates.index', compact('certificates', 'tracks', 'users'));
+        } catch (\Exception $e) {
+            \Log::error('Certificate index error: ' . $e->getMessage());
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'Error loading certificates: ' . $e->getMessage());
         }
-
-        // Filter by user
-        if ($request->has('user_id') && $request->user_id) {
-            $query->where('user_id', $request->user_id);
-        }
-
-        // Search by certificate number
-        if ($request->has('search') && $request->search) {
-            $query->where('certificate_number', 'like', '%' . $request->search . '%');
-        }
-
-        $certificates = $query->latest('issued_at')->paginate(20);
-        $tracks = Track::all();
-        $users = User::all();
-
-        return view('admin.certificates.index', compact('certificates', 'tracks', 'users'));
     }
 
     public function create()

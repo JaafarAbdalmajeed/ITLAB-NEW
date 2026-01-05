@@ -10,6 +10,7 @@ use App\Listeners\SendTrackCompletionNotification;
 use App\Listeners\CheckAchievements;
 use App\Listeners\CheckQuizAchievements;
 use App\Listeners\CheckLessonAchievements;
+use App\Listeners\IssueQuizCertificate;
 use App\Models\Track;
 use App\Models\Quiz;
 use App\Policies\TrackPolicy;
@@ -59,6 +60,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             QuizSubmitted::class,
             CheckQuizAchievements::class
+        );
+
+        Event::listen(
+            QuizSubmitted::class,
+            IssueQuizCertificate::class
         );
 
         Event::listen(
