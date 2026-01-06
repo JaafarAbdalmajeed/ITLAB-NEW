@@ -159,17 +159,19 @@
 
             <!-- Action Buttons -->
             <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
-                <form action="{{ route('preferences.reset') }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to reset all preferences to defaults?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-secondary" style="padding: 12px 24px; background: #6c757d; color: #fff; text-decoration: none; border-radius: 5px; border: none; cursor: pointer;">
-                        Reset to Defaults
-                    </button>
-                </form>
+                <button type="button" onclick="resetPreferences()" class="btn btn-secondary" style="padding: 12px 24px; background: #6c757d; color: #fff; text-decoration: none; border-radius: 5px; border: none; cursor: pointer;">
+                    Reset to Defaults
+                </button>
                 <button type="submit" class="btn btn-primary" style="padding: 12px 24px; background: #04aa6d; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: 600;">
                     Save Preferences
                 </button>
             </div>
+        </form>
+        
+        <!-- Hidden form for reset -->
+        <form action="{{ route('preferences.reset') }}" method="POST" id="resetForm" style="display: none;">
+            @csrf
+            @method('DELETE')
         </form>
     </div>
 </main>
@@ -246,6 +248,13 @@
 
     // Apply on page load
     applyPreferences();
+
+    // Reset preferences function
+    function resetPreferences() {
+        if (confirm('Are you sure you want to reset all preferences to defaults?')) {
+            document.getElementById('resetForm').submit();
+        }
+    }
 </script>
 @endpush
 
