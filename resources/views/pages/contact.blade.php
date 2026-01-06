@@ -11,7 +11,7 @@
     </header>
 
     <section>
-      <form action="{{ route('pages.contact') }}" method="post" style="max-width:640px;">
+      <form action="{{ route('pages.contact.submit') }}" method="post" style="max-width:640px;">
         @csrf
         <label for="name">Name</label><br />
         <input id="name" name="name" type="text" style="width:100%; padding:8px; margin-bottom:8px;" required>

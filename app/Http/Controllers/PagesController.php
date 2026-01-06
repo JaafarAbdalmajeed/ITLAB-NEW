@@ -541,7 +541,7 @@ class PagesController extends Controller
 
     public function contact()
     {
-        $page = \App\Models\Page::where('slug', 'contact')->with('publishedSections')->firstOrFail();
+        $page = \App\Models\Page::where('slug', 'contact')->with('publishedSections')->first();
         return view('pages.contact', compact('page'));
     }
 
